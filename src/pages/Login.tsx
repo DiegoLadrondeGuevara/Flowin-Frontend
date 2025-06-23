@@ -2,6 +2,7 @@ import { type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import useToken from "../contexts/TokenContext";
 import { useLogin } from "../api";
+import FlowInName from "../components/FlowInName";
 import {
   Card,
   CardHeader,
@@ -37,17 +38,10 @@ export default function Login() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-sm">
+        <FlowInName className="mb-4" /> {/* Aquí va tu logo */}
         <CardHeader>
           <CardTitle>Inicia sesión</CardTitle>
           <CardDescription>Ingresa tus credenciales para continuar</CardDescription>
-          <CardAction>
-            <a
-              href="/signup"
-              className="text-blue-600 text-sm font-medium hover:underline"
-            >
-              Registrarse
-            </a>
-          </CardAction>
         </CardHeader>
 
         <CardContent>
@@ -72,7 +66,15 @@ export default function Login() {
             </Button>
           </form>
         </CardContent>
-
+        <CardAction className="w-full text-center text-sm text-gray-500">
+          ¿No tienes una cuenta?
+        <a
+        href="/signup"
+        className="ml-1 text-blue-600 hover:underline font-medium"
+        >
+          Regístrate
+        </a>
+        </CardAction>
         <CardFooter className="justify-center text-sm text-gray-500">
           ¿Olvidaste tu contraseña?
         </CardFooter>

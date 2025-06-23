@@ -1,6 +1,7 @@
 import { type FormEvent } from "react";
 import useToken from "../contexts/TokenContext";
 import { useNavigate } from "react-router";
+import FlowInName from "../components/FlowInName";
 import { useSignup } from "../api";
 import {
   Card,
@@ -42,6 +43,7 @@ export default function Signup() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-md">
+        <FlowInName className="mb-4" /> 
         <CardHeader>
           <CardTitle>Crear una cuenta</CardTitle>
           <CardDescription>Ingresa tus datos para registrarte</CardDescription>
