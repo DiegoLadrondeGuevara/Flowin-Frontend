@@ -1,8 +1,16 @@
 import { type FormEvent } from "react";
-import "../styles/App.css";
 import useToken from "../contexts/TokenContext";
 import { useNavigate } from "react-router";
 import { useSignup } from "../api";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
 
 export default function Signup() {
   const { saveToken } = useToken();
@@ -32,21 +40,59 @@ export default function Signup() {
   }
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Registrarse
-      </h2>
-      <form onSubmit={handleSignup} className="space-y-4">
-        <input name="username" placeholder="Nombre de usuario" required className="input" />
-        <input name="mail" placeholder="Correo electrónico" type="email" required className="input" />
-        <input name="password" placeholder="Contraseña" type="password" required className="input" />
-        <input name="gustosMusicales" placeholder="Gustos musicales (opcional)" className="input" />
-        <input name="artistasFavoritos" placeholder="Artistas favoritos (opcional)" className="input" />
-        <button type="submit" className="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 font-semibold">
-          Registrarse
-        </button>
-      </form>
-    </div>
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Crear una cuenta</CardTitle>
+          <CardDescription>Ingresa tus datos para registrarte</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={handleSignup} className="flex flex-col gap-4">
+            <input
+              name="username"
+              placeholder="Nombre de usuario"
+              required
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="mail"
+              type="email"
+              placeholder="Correo electrónico"
+              required
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="Contraseña"
+              required
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="gustosMusicales"
+              placeholder="Gustos musicales (opcional)"
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="artistasFavoritos"
+              placeholder="Artistas favoritos (opcional)"
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+              Registrarse
+            </Button>
+          </form>
+        </CardContent>
+
+        <CardFooter className="justify-center text-sm text-gray-500">
+          ¿Ya tienes una cuenta?{" "}
+          <a href="/login" className="ml-1 text-blue-600 hover:underline font-medium">
+            Inicia sesión
+          </a>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
-
