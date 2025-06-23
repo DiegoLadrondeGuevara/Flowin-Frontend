@@ -11,8 +11,8 @@ createRoot(document.getElementById('root')!).render(
     <TokenProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/usuario/registrarse" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </TokenProvider>

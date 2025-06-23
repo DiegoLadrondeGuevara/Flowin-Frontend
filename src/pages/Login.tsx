@@ -69,7 +69,7 @@ export default function Login() {
         <CardAction className="w-full text-center text-sm text-gray-500">
           ¿No tienes una cuenta?
         <a
-        href="/signup"
+        href="/usuario/registrarse"
         className="ml-1 text-blue-600 hover:underline font-medium"
         >
           Regístrate

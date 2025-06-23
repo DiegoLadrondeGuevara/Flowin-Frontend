@@ -34,7 +34,7 @@ export default function Signup() {
 
     if (result.success) {
       saveToken(result.token);
-      navigate("/usuario_login");
+      navigate("/");
     } else {
       alert(result.error);
     }
@@ -90,7 +90,7 @@ export default function Signup() {
 
         <CardFooter className="justify-center text-sm text-gray-500">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/login" className="ml-1 text-blue-600 hover:underline font-medium">
+          <a href="/auth/login" className="ml-1 text-blue-600 hover:underline font-medium">
             Inicia sesión
           </a>
         </CardFooter>
