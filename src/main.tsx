@@ -1,10 +1,20 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { BrowserRouter, Routes, Route } from 'react-router'
+import Login from './pages/Login'
+import Signup from './pages/SignUp'
+import { TokenProvider } from './contexts/TokenContext'
+import './styles/index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <TokenProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </BrowserRouter>
+    </TokenProvider>
+  </StrictMode>
+);
