@@ -27,18 +27,18 @@ export default function Login() {
 
     const result = await login({ username, password });
 
-    if (result.success) {
+    if (result.success && result.token) {
       saveToken(result.token);
       navigate("/");
     } else {
-      alert(result.error);
+      alert(result.error ?? "Error al iniciar sesión.");
     }
   };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-sm">
-        <FlowInName className="mb-4" /> {/* Aquí va tu logo */}
+        <FlowInName className="mb-4" />
         <CardHeader>
           <CardTitle>Inicia sesión</CardTitle>
           <CardDescription>Ingresa tus credenciales para continuar</CardDescription>
@@ -66,15 +66,17 @@ export default function Login() {
             </Button>
           </form>
         </CardContent>
+
         <CardAction className="w-full text-center text-sm text-gray-500">
           ¿No tienes una cuenta?
-        <a
-        href="/usuario/registrarse"
-        className="ml-1 text-blue-600 hover:underline font-medium"
-        >
-          Regístrate
-        </a>
+          <a
+            href="/usuario/registrarse"
+            className="ml-1 text-blue-600 hover:underline font-medium"
+          >
+            Regístrate
+          </a>
         </CardAction>
+
         <CardFooter className="justify-center text-sm text-gray-500">
           ¿Olvidaste tu contraseña?
         </CardFooter>
