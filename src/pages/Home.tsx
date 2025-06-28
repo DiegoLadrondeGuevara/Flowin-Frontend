@@ -1,6 +1,6 @@
-// src/pages/Home.tsx
-import React from 'react';
-import SalaCard from '../components/ui/SalaCard';
+import React from "react";
+import SalaCard from "../components/ui/SalaCard";
+import LogoutButton from "../components/LogoutButton";
 
 interface Sala {
   id: string;
@@ -12,38 +12,40 @@ interface Sala {
 
 const salas: Sala[] = [
   {
-    id: '1',
-    nombre: 'Sala Rock',
+    id: "1",
+    nombre: "Sala Rock",
     personas: 10,
-    genero: 'Rock',
-    artista: 'Queen',
+    genero: "Rock",
+    artista: "Queen",
   },
   {
-    id: '2',
-    nombre: 'Sala Pop',
+    id: "2",
+    nombre: "Sala Pop",
     personas: 25,
-    genero: 'Pop',
-    artista: 'Taylor Swift',
+    genero: "Pop",
+    artista: "Taylor Swift",
   },
   {
-    id: '3',
-    nombre: 'Sala Jazz',
+    id: "3",
+    nombre: "Sala Jazz",
     personas: 7,
-    genero: 'Jazz',
-    artista: 'Miles Davis',
+    genero: "Jazz",
+    artista: "Miles Davis",
   },
 ];
 
 const Home: React.FC = () => {
-
   const handleEntrar = (salaId: string) => {
     alert(`Entrando a la sala ${salaId}`);
-    // Aquí podés agregar la navegación a la sala o lógica que quieras
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Hola Usuario, a dónde quieres ir?</h1>
+      <LogoutButton />
+      <div style={styles.header}>
+        <h1 style={styles.title}>¡Hey, Usuario!</h1>
+        <h2 style={styles.subtitle}>¿Qué planes para hoy?</h2>
+      </div>
       <div style={styles.grid}>
         {salas.map((sala) => (
           <SalaCard
@@ -62,29 +64,36 @@ const Home: React.FC = () => {
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    padding: 20,
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#87ceeb', // azul celeste
-    color: '#fff',              // texto blanco
+    padding: "40px 20px",
+    fontFamily: "'Poppins', sans-serif",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#87ceeb",
+    overflowY: "auto",
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: 50,
   },
   title: {
-    fontSize: '2.8rem',
-    fontWeight: '700',
-    marginBottom: 30,
+    fontSize: "3rem",
+    fontWeight: 600,
+    margin: 0,
+  },
+  subtitle: {
+    fontSize: "1.8rem",
+    marginTop: 10,
   },
   grid: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
     gap: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     maxWidth: 1000,
-    width: '100%',
-  }
+    width: "100%",
+  },
 };
 
 export default Home;

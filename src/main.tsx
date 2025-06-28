@@ -1,9 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; // usa react-router-dom
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/SignUp';
 import Home from './pages/Home';
+import Sala from './pages/Sala'; // <-- Aquí se importa
 import { TokenProvider } from './contexts/TokenContext';
 import './styles/index.css';
 
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/auth/login" element={<Login />} />
           <Route path="/usuario/registrarse" element={<Signup />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/sala" element={<Sala />} /> {/* <-- ahora correctamente usa la página de Sala */}
           <Route path="*" element={<Navigate to="/auth/login" replace />} />
         </Routes>
       </BrowserRouter>
