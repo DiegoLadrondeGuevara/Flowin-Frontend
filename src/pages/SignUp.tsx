@@ -22,21 +22,24 @@ export default function Signup() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const gustosMusicales = formData.get("gustosMusicales")?.toString().trim() || undefined;
+    const artistasFavoritos = formData.get("artistasFavoritos")?.toString().trim() || undefined;
+
     const usuario = {
       username: formData.get("username") as string,
       mail: formData.get("mail") as string,
       password: formData.get("password") as string,
-      gustosMusicales: formData.get("gustosMusicales") as string,
-      artistasFavoritos: formData.get("artistasFavoritos") as string,
+      gustosMusicales,
+      artistasFavoritos,
     };
 
     const result = await signup(usuario);
 
-    if (result.success) {
+    if (result.success && result.token) {
       saveToken(result.token);
       navigate("/");
     } else {
-      alert(result.error);
+      alert(result.error ?? "Error al registrarse.");
     }
   }
 

@@ -32,7 +32,7 @@ export function useLogin() {
         },
       });
 
-      const bearerToken = response.data; // "Bearer <token>"
+      const bearerToken = response.data;
       const token = extractToken(bearerToken);
 
       return { success: true, token };
@@ -52,9 +52,10 @@ export function useSignup() {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: false, // ⚠️ Previene envío automático de cookies
       });
 
-      const bearerToken = response.data; // "Bearer <token>"
+      const bearerToken = response.data;
       const token = extractToken(bearerToken);
 
       return { success: true, token };
@@ -67,7 +68,6 @@ export function useSignup() {
   return { signup };
 }
 
-// 🔹 Extrae el token eliminando "Bearer " si está presente
 function extractToken(bearerString: string): string {
   if (bearerString?.startsWith("Bearer ")) {
     return bearerString.replace("Bearer ", "").trim();
@@ -75,7 +75,6 @@ function extractToken(bearerString: string): string {
   return bearerString;
 }
 
-// 🔹 Manejo seguro de errores con axios + fallback
 function extractErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     if (typeof error.response?.data === "string") {
