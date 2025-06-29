@@ -25,12 +25,15 @@ export default function Signup() {
     "Rock",
     "Pop",
     "Jazz",
-    "Reggaeton",
+    "Latina", // <- antes era "Reggaeton"
     "Salsa",
     "Electrónica",
     "Clásica",
     "Indie",
     "Trap",
+    "Hip-Hop",
+    "Country",
+    "Metal",
   ];
 
   async function handleSignup(e: FormEvent<HTMLFormElement>) {

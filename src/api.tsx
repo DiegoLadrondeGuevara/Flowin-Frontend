@@ -77,16 +77,16 @@ export async function actualizarArtistasFavoritos(artistas: string[]) {
   }
 
   try {
-    const response = await axios.put(
-      `${BACKEND_URL}/usuario/actualizar-artistas`,
-      { artistasFavoritos: artistas },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      const response = await axios.patch(
+    `${BACKEND_URL}/usuario/actualizar-artistas`,
+    { artistasFavoritos: artistas },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+);
     return response.data;
   } catch (error: unknown) {
     throw new Error(extractErrorMessage(error));
