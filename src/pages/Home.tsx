@@ -1,6 +1,6 @@
 import React from "react";
 import SalaCard from "../components/ui/SalaCard";
-import LogoutButton from "../components/LogoutButton";
+import Navbar from "../components/Navbar";
 
 interface Sala {
   id: string;
@@ -40,25 +40,27 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <LogoutButton />
-      <div style={styles.header}>
-        <h1 style={styles.title}>¡Hey, Usuario!</h1>
-        <h2 style={styles.subtitle}>¿Qué planes para hoy?</h2>
+    <>
+      <Navbar />
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>¡Hey, Usuario!</h1>
+          <h2 style={styles.subtitle}>¿Qué planes para hoy?</h2>
+        </div>
+        <div style={styles.grid}>
+          {salas.map((sala) => (
+            <SalaCard
+              key={sala.id}
+              nombre={sala.nombre}
+              personas={sala.personas}
+              genero={sala.genero}
+              artista={sala.artista}
+              onEntrar={() => handleEntrar(sala.id)}
+            />
+          ))}
+        </div>
       </div>
-      <div style={styles.grid}>
-        {salas.map((sala) => (
-          <SalaCard
-            key={sala.id}
-            nombre={sala.nombre}
-            personas={sala.personas}
-            genero={sala.genero}
-            artista={sala.artista}
-            onEntrar={() => handleEntrar(sala.id)}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 };
 
@@ -70,7 +72,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     alignItems: "center",
     minHeight: "100vh",
-    backgroundColor: "#87ceeb",
+    backgroundColor: "white",
     overflowY: "auto",
   },
   header: {

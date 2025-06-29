@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import type { IMessage } from '@stomp/stompjs';
@@ -139,5 +139,9 @@ const Sala = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Sala;
 //hola
+=======
+export default Sala;
+>>>>>>> 626101d (feat: agregar componente navbar y actualizar dependencias del proyecto)
