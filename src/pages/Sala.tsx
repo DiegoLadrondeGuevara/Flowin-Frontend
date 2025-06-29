@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import type { IMessage } from '@stomp/stompjs';
+import SalaCard from '../components/ui/SalaCard';
 
 type ChatMessage = {
   username: string;
@@ -78,6 +79,19 @@ const Sala = () => {
     <div style={{ fontFamily: 'Arial', padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <h2>Probar Chat WebSocket</h2>
 
+      {/* Información de la Sala */}
+      {salaId && (
+        <div style={{ marginBottom: '20px' }}>
+          <SalaCard
+            nombre={`Sala ${salaId}`}
+            personas={mensajes.length}
+            genero="General"
+            artista="Múltiples"
+            onEntrar={() => console.log('Ya estás en la sala')}
+          />
+        </div>
+      )}
+
       <label>Bearer Token:</label>
       <input
         type="text"
@@ -139,9 +153,4 @@ const Sala = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Sala;
-//hola
-=======
-export default Sala;
->>>>>>> 626101d (feat: agregar componente navbar y actualizar dependencias del proyecto)

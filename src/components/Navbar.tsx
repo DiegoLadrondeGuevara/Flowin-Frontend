@@ -6,61 +6,25 @@ const Navbar: React.FC = () => {
   const isLoggedIn = true; // Cambia esto según tu lógica real
 
   return (
-    <nav style={styles.navbar}>
-      <div style={styles.logo}>FlowIn</div>
-      <div style={styles.links}>
+    <nav className="flex justify-between items-center px-8 py-4 bg-blue-600 shadow-md sticky top-0 z-50">
+      <div className="text-white font-bold text-2xl tracking-wide font-['Poppins']">
+        FlowIn
+      </div>
+      <div className="flex items-center gap-5">
         {!isLoggedIn && (
           <>
-            <a href="/login" style={styles.link}>Login</a>
-            <a href="/signup" style={{ ...styles.link, ...styles.signup }}>Registrarse</a>
+            <a href="/login" className="text-white font-medium text-base px-4 py-2 rounded-md transition-colors hover:bg-blue-500">
+              Login
+            </a>
+            <a href="/signup" className="bg-white text-blue-600 font-bold px-4 py-2 rounded-md transition-colors hover:bg-blue-50">
+              Registrarse
+            </a>
           </>
         )}
         {isLoggedIn && <LogoutButton />}
       </div>
     </nav>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  navbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1rem 2rem',
-    backgroundColor: '#3b82f6', // ring-blue-500
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-  },
-  logo: {
-    color: 'white',
-    fontWeight: 700,
-    fontSize: '1.7rem',
-    letterSpacing: '1px',
-    fontFamily: 'Poppins, sans-serif',
-  },
-  links: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1.2rem',
-  },
-  link: {
-    color: 'white',
-    textDecoration: 'none',
-    fontWeight: 500,
-    fontSize: '1rem',
-    padding: '0.5rem 1.1rem',
-    borderRadius: '6px',
-    transition: 'background 0.2s',
-    background: 'transparent',
-  },
-  signup: {
-    background: 'white',
-    color: '#3b82f6',
-    fontWeight: 700,
-    border: 'none',
-  },
 };
 
 export default Navbar; 
