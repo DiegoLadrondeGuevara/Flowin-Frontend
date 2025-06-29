@@ -15,8 +15,8 @@ type SignupData = {
   username: string;
   mail: string;
   password: string;
-  gustosMusicales?: string[];     
-  artistasFavoritos?: string[];     
+  gustosMusicales?: string[];
+  artistasFavoritos?: string[];
 };
 
 export function useLogin() {
@@ -52,7 +52,7 @@ export function useSignup() {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: false, // ⚠️ Previene envío automático de cookies
+        withCredentials: false,
       });
 
       const bearerToken = response.data;
@@ -68,6 +68,57 @@ export function useSignup() {
   return { signup };
 }
 
+// ✅ Actualizar artistas favoritos
+export async function actualizarArtistasFavoritos(artistas: string[]) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("No se encontró el token de autenticación");
+  }
+
+  try {
+    const response = await axios.put(
+      `${BACKEND_URL}/usuario/actualizar-artistas`,
+      { artistasFavoritos: artistas },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(extractErrorMessage(error));
+  }
+}
+
+// ✅ Actualizar gustos musicales
+export async function actualizarGustosMusicales(gustos: string[]) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("No se encontró el token de autenticación");
+  }
+
+  try {
+    const response = await axios.put(
+      `${BACKEND_URL}/usuario/actualizar-gustosMusicales`,
+      { gustosMusicales: gustos },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(extractErrorMessage(error));
+  }
+}
+
+// Utils
 function extractToken(bearerString: string): string {
   if (bearerString?.startsWith("Bearer ")) {
     return bearerString.replace("Bearer ", "").trim();
