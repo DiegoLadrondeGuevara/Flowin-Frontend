@@ -15,8 +15,8 @@ type SignupData = {
   username: string;
   mail: string;
   password: string;
-  gustosMusicales?: string;
-  artistasFavoritos?: string;
+  gustosMusicales?: string[];     
+  artistasFavoritos?: string[];     
 };
 
 export function useLogin() {

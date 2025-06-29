@@ -22,15 +22,15 @@ export default function Signup() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const gustosMusicales = formData.get("gustosMusicales")?.toString().trim() || undefined;
-    const artistasFavoritos = formData.get("artistasFavoritos")?.toString().trim() || undefined;
+    const gustosMusicales = formData.get("gustosMusicales")?.toString().trim();
+    const artistasFavoritos = formData.get("artistasFavoritos")?.toString().trim();
 
     const usuario = {
       username: formData.get("username") as string,
       mail: formData.get("mail") as string,
       password: formData.get("password") as string,
-      gustosMusicales,
-      artistasFavoritos,
+      gustosMusicales: gustosMusicales ? [gustosMusicales] : undefined,
+      artistasFavoritos: artistasFavoritos ? [artistasFavoritos] : undefined,
     };
 
     const result = await signup(usuario);
