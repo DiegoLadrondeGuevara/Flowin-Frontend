@@ -1,4 +1,4 @@
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import useToken from "../contexts/TokenContext";
 import { useNavigate } from "react-router";
 import FlowInName from "../components/FlowInName";
@@ -19,6 +19,23 @@ export default function Signup() {
   const navigate = useNavigate();
   const { signup } = useSignup();
 
+  const [gustosMusicales, setGustosMusicales] = useState<string[]>([]);
+
+  const generosDisponibles = [
+    "Rock",
+    "Pop",
+    "Jazz",
+    "Latina", // <- antes era "Reggaeton"
+    "Salsa",
+    "Electrónica",
+    "Clásica",
+    "Indie",
+    "Trap",
+    "Hip-Hop",
+    "Country",
+    "Metal",
+  ];
+
   async function handleSignup(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -28,6 +45,7 @@ export default function Signup() {
       username: formData.get("username") as string,
       mail: formData.get("mail") as string,
       password: formData.get("password") as string,
+      gustosMusicales: gustosMusicales.length > 0 ? gustosMusicales : undefined,
     };
 
     const result = await signup(usuario);
@@ -37,6 +55,14 @@ export default function Signup() {
       navigate("/seleccion-artistas");
     } else {
       alert(result.error ?? "Error al registrarse.");
+    }
+  }
+
+  function toggleGenero(genero: string) {
+    if (gustosMusicales.includes(genero)) {
+      setGustosMusicales(gustosMusicales.filter((g) => g !== genero));
+    } else {
+      setGustosMusicales([...gustosMusicales, genero]);
     }
   }
 
@@ -72,6 +98,32 @@ export default function Signup() {
               className="px-4 py-2 border border-gray-300 rounded-md"
             />
 
+            {/* 🎵 Gustos musicales como botones seleccionables */}
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">
+                Gustos musicales (opcional)
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {generosDisponibles.map((genero) => {
+                  const seleccionado = gustosMusicales.includes(genero);
+                  return (
+                    <button
+                      type="button"
+                      key={genero}
+                      onClick={() => toggleGenero(genero)}
+                      className={`px-4 py-2 rounded-full border transition ${
+                        seleccionado
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-gray-200 text-gray-700 border-gray-300"
+                      }`}
+                    >
+                      {genero}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
               Registrarse
             </Button>
@@ -88,3 +140,4 @@ export default function Signup() {
     </main>
   );
 }
+

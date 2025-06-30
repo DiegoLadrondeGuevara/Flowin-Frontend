@@ -9,7 +9,7 @@ import ReproductorTest from './pages/ReproductorTest'; // ⬅️ IMPORTANTE: ase
 import { TokenProvider } from './contexts/TokenContext';
 import './styles/index.css';
 import Perfil from './pages/Perfil';
-import SeleccionArtistas from './pages/SeleccionArtistas';
+import EditarPerfil from './pages/EditarPerfil';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/usuario/registrarse" element={<Signup />} />
           <Route path="/home" element={<Home />} />
           <Route path="/sala" element={<Sala />} />
-          <Route path="/seleccion-artistas" element={<SeleccionArtistas />} />
+          <Route path="/seleccion-artistas" element={<EditarPerfil />} />
 
 
           {/* Catch-all: redirige a login */}
