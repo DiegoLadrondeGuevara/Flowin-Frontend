@@ -1,6 +1,8 @@
 import React from "react";
 import SalaCard from "../components/ui/SalaCard";
-import LogoutButton from "../components/LogoutButton";
+import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router";
+import FlowInLogo from "../components/FlowInLogo";
 
 interface Sala {
   id: string;
@@ -13,87 +15,82 @@ interface Sala {
 const salas: Sala[] = [
   {
     id: "1",
-    nombre: "Sala Rock",
-    personas: 10,
+    nombre: "Chill Vibes",
+    personas: 32,
+    genero: "Ambient",
+    artista: "Various Artists",
+  },
+  {
+    id: "2",
+    nombre: "Latin Beats",
+    personas: 56,
+    genero: "Latin",
+    artista: "Manu Chao",
+  },
+  {
+    id: "3",
+    nombre: "Electronic Room",
+    personas: 21,
+    genero: "Electronic",
+    artista: "Daft Punk",
+  },
+  {
+    id: "4",
+    nombre: "Rock Classics",
+    personas: 45,
     genero: "Rock",
     artista: "Queen",
   },
   {
-    id: "2",
-    nombre: "Sala Pop",
-    personas: 25,
-    genero: "Pop",
-    artista: "Taylor Swift",
-  },
-  {
-    id: "3",
-    nombre: "Sala Jazz",
-    personas: 7,
+    id: "5",
+    nombre: "Jazz Lounge",
+    personas: 18,
     genero: "Jazz",
     artista: "Miles Davis",
+  },
+  {
+    id: "6",
+    nombre: "Pop Hits",
+    personas: 67,
+    genero: "Pop",
+    artista: "Taylor Swift",
   },
 ];
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleEntrar = (salaId: string) => {
-    alert(`Entrando a la sala ${salaId}`);
+    console.log(`Entrando a la sala ${salaId}`);
+    // Navegar a la sala específica
+    navigate(`/sala/${salaId}`);
   };
 
   return (
-    <div style={styles.container}>
-      <LogoutButton />
-      <div style={styles.header}>
-        <h1 style={styles.title}>¡Hey, Usuario!</h1>
-        <h2 style={styles.subtitle}>¿Qué planes para hoy?</h2>
-      </div>
-      <div style={styles.grid}>
-        {salas.map((sala) => (
-          <SalaCard
-            key={sala.id}
-            nombre={sala.nombre}
-            personas={sala.personas}
-            genero={sala.genero}
-            artista={sala.artista}
-            onEntrar={() => handleEntrar(sala.id)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-white p-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <FlowInLogo className="mx-auto mb-4" />
+        </div>
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    padding: "40px 20px",
-    fontFamily: "'Poppins', sans-serif",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    minHeight: "100vh",
-    backgroundColor: "#87ceeb",
-    overflowY: "auto",
-  },
-  header: {
-    textAlign: "center",
-    marginBottom: 50,
-  },
-  title: {
-    fontSize: "3rem",
-    fontWeight: 600,
-    margin: 0,
-  },
-  subtitle: {
-    fontSize: "1.8rem",
-    marginTop: 10,
-  },
-  grid: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 20,
-    justifyContent: "center",
-    maxWidth: 1000,
-    width: "100%",
-  },
+        {/* Cards Grid */}
+        <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
+          {salas.map((sala) => (
+            <SalaCard
+              key={sala.id}
+              nombre={sala.nombre}
+              personas={sala.personas}
+              genero={sala.genero}
+              artista={sala.artista}
+              onEntrar={() => handleEntrar(sala.id)}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Home;

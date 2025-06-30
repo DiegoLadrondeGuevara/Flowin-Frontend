@@ -1,8 +1,9 @@
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import useToken from "../contexts/TokenContext";
 import { useNavigate } from "react-router";
 import FlowInName from "../components/FlowInName";
 import { useSignup } from "../api";
+
 import {
   Card,
   CardHeader,
@@ -18,35 +19,57 @@ export default function Signup() {
   const navigate = useNavigate();
   const { signup } = useSignup();
 
+  const [gustosMusicales, setGustosMusicales] = useState<string[]>([]);
+
+  const generosDisponibles = [
+    "Rock",
+    "Pop",
+    "Jazz",
+    "Latina", // <- antes era "Reggaeton"
+    "Salsa",
+    "Electrónica",
+    "Clásica",
+    "Indie",
+    "Trap",
+    "Hip-Hop",
+    "Country",
+    "Metal",
+  ];
+
   async function handleSignup(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const gustosMusicales = formData.get("gustosMusicales")?.toString().trim() || undefined;
-    const artistasFavoritos = formData.get("artistasFavoritos")?.toString().trim() || undefined;
 
     const usuario = {
       username: formData.get("username") as string,
       mail: formData.get("mail") as string,
       password: formData.get("password") as string,
-      gustosMusicales,
-      artistasFavoritos,
+      gustosMusicales: gustosMusicales.length > 0 ? gustosMusicales : undefined,
     };
 
     const result = await signup(usuario);
 
     if (result.success && result.token) {
       saveToken(result.token);
-      navigate("/");
+      navigate("/seleccion-artistas");
     } else {
       alert(result.error ?? "Error al registrarse.");
+    }
+  }
+
+  function toggleGenero(genero: string) {
+    if (gustosMusicales.includes(genero)) {
+      setGustosMusicales(gustosMusicales.filter((g) => g !== genero));
+    } else {
+      setGustosMusicales([...gustosMusicales, genero]);
     }
   }
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-md">
-        <FlowInName className="mb-4" /> 
+        <FlowInName className="mb-4" />
         <CardHeader>
           <CardTitle>Crear una cuenta</CardTitle>
           <CardDescription>Ingresa tus datos para registrarte</CardDescription>
@@ -58,32 +81,48 @@ export default function Signup() {
               name="username"
               placeholder="Nombre de usuario"
               required
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-md"
             />
             <input
               name="mail"
               type="email"
               placeholder="Correo electrónico"
               required
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-md"
             />
             <input
               name="password"
               type="password"
               placeholder="Contraseña"
               required
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-md"
             />
-            <input
-              name="gustosMusicales"
-              placeholder="Gustos musicales (opcional)"
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              name="artistasFavoritos"
-              placeholder="Artistas favoritos (opcional)"
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+
+            {/* 🎵 Gustos musicales como botones seleccionables */}
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">
+                Gustos musicales (opcional)
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {generosDisponibles.map((genero) => {
+                  const seleccionado = gustosMusicales.includes(genero);
+                  return (
+                    <button
+                      type="button"
+                      key={genero}
+                      onClick={() => toggleGenero(genero)}
+                      className={`px-4 py-2 rounded-full border transition ${
+                        seleccionado
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-gray-200 text-gray-700 border-gray-300"
+                      }`}
+                    >
+                      {genero}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
               Registrarse

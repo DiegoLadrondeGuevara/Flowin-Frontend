@@ -1,13 +1,15 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
-import { Client, over } from 'stompjs';
+import { Client } from '@stomp/stompjs';
+import type { IMessage } from '@stomp/stompjs';
+import SalaCard from '../components/ui/SalaCard';
 
 type ChatMessage = {
   username: string;
   contenido: string;
 };
 
-const ChatTester: React.FC = () => {
+const Sala = () => {
   const [token, setToken] = useState('');
   const [salaId, setSalaId] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -23,44 +25,72 @@ const ChatTester: React.FC = () => {
       return;
     }
 
-    const socket = new SockJS('http://localhost:8080/ws-chat');
-    const stompClient = over(socket);
-    stompClientRef.current = stompClient;
+    const client = new Client({
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws-chat'),
+      connectHeaders: {
+        Authorization: token,
+      },
+      reconnectDelay: 5000,
+      onConnect: () => {
+        setStatus('Conectado al chat.');
+        setError(null);
 
-    stompClient.connect({ Authorization: token }, () => {
-      setStatus('Conectado al chat.');
-      setError(null);
+        client.subscribe(`/topic/sala/${salaId}`, (message: IMessage) => {
+          const newMessages: ChatMessage[] = JSON.parse(message.body);
+          setMensajes(newMessages);
+        });
 
-      stompClient.subscribe(`/topic/sala/${salaId}`, (message) => {
-        const newMessages: ChatMessage[] = JSON.parse(message.body);
-        setMensajes(newMessages);
-      });
-
-      stompClient.subscribe(`/topic/error/${salaId}`, (message) => {
-        setError(message.body);
-      });
-
-    }, (err) => {
-      console.error('Error de conexión:', err);
-      setStatus('Error de conexión');
+        client.subscribe(`/topic/error/${salaId}`, (message: IMessage) => {
+          setError(message.body);
+        });
+      },
+      onStompError: (frame) => {
+        console.error('STOMP error:', frame);
+        setStatus('Error STOMP');
+      },
+      onWebSocketError: (event) => {
+        console.error('WebSocket error:', event);
+        setStatus('Error de WebSocket');
+      },
     });
+
+    stompClientRef.current = client;
+    client.activate();
   };
 
   const enviarMensaje = () => {
-    if (!mensaje || !stompClientRef.current) return;
+    if (!mensaje || !stompClientRef.current || !stompClientRef.current.connected) return;
 
     const msg = {
       contenido: mensaje,
       salaId: parseInt(salaId, 10),
     };
 
-    stompClientRef.current.send('/app/chat.send', { Authorization: token }, JSON.stringify(msg));
+    stompClientRef.current.publish({
+      destination: '/app/chat.send',
+      body: JSON.stringify(msg),
+      headers: { Authorization: token },
+    });
+
     setMensaje('');
   };
 
   return (
     <div style={{ fontFamily: 'Arial', padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <h2>Probar Chat WebSocket</h2>
+
+      {/* Información de la Sala */}
+      {salaId && (
+        <div style={{ marginBottom: '20px' }}>
+          <SalaCard
+            nombre={`Sala ${salaId}`}
+            personas={mensajes.length}
+            genero="General"
+            artista="Múltiples"
+            onEntrar={() => console.log('Ya estás en la sala')}
+          />
+        </div>
+      )}
 
       <label>Bearer Token:</label>
       <input
@@ -86,11 +116,26 @@ const ChatTester: React.FC = () => {
 
       <div style={{ marginTop: '10px', color: 'green' }}>{status}</div>
 
-      <div id="chat" style={{ border: '1px solid #ccc', height: '300px', overflowY: 'auto', padding: '10px', marginTop: '10px' }}>
+      <div
+        id="chat"
+        style={{
+          border: '1px solid #ccc',
+          height: '300px',
+          overflowY: 'auto',
+          padding: '10px',
+          marginTop: '10px',
+        }}
+      >
         {mensajes.map((m, i) => (
-          <div key={i}><strong>{m.username}:</strong> {m.contenido}</div>
+          <div key={i}>
+            <strong>{m.username}:</strong> {m.contenido}
+          </div>
         ))}
-        {error && <div style={{ color: 'red' }}><strong>Error:</strong> {error}</div>}
+        {error && (
+          <div style={{ color: 'red' }}>
+            <strong>Error:</strong> {error}
+          </div>
+        )}
       </div>
 
       <input
@@ -108,4 +153,4 @@ const ChatTester: React.FC = () => {
   );
 };
 
-export default ChatTester;
+export default Sala;
