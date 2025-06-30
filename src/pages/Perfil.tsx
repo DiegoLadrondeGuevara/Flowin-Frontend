@@ -20,7 +20,7 @@ const Perfil: React.FC = () => {
           setLoading(false);
           return;
         }
-        const res = await fetch("http://localhost:8080/usuario/perfil", {
+        const res = await fetch("http://23.23.63.26:8080/usuario/perfil", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

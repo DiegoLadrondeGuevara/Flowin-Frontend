@@ -7,6 +7,7 @@ type TokenContextType = {
 };
 
 const TokenContext = createContext<TokenContextType | undefined>(undefined);
+export { TokenContext };
 
 type TokenProviderProps = {
   children: ReactNode;
