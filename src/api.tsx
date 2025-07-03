@@ -68,16 +68,11 @@ export function useSignup() {
   return { signup };
 }
 
-// ✅ Actualizar artistas favoritos
 export async function actualizarArtistasFavoritos(artistas: string[]) {
   const token = localStorage.getItem("token");
+  if (!token) throw new Error("No se encontró el token de autenticación");
 
-  if (!token) {
-    throw new Error("No se encontró el token de autenticación");
-  }
-
-  try {
-      const response = await axios.patch(
+  const response = await axios.patch(
     `${BACKEND_URL}/usuario/actualizar-artistas`,
     { artistasFavoritos: artistas },
     {
@@ -86,11 +81,8 @@ export async function actualizarArtistasFavoritos(artistas: string[]) {
         "Content-Type": "application/json",
       },
     }
-);
-    return response.data;
-  } catch (error: unknown) {
-    throw new Error(extractErrorMessage(error));
-  }
+  );
+  return response.data;
 }
 
 // ✅ Actualizar gustos musicales

@@ -9,7 +9,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
   CardAction,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
@@ -76,10 +75,6 @@ export default function Login() {
             Regístrate
           </a>
         </CardAction>
-
-        <CardFooter className="justify-center text-sm text-gray-500">
-          ¿Olvidaste tu contraseña?
-        </CardFooter>
       </Card>
     </main>
   );

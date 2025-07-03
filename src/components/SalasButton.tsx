@@ -1,0 +1,15 @@
+import React from "react";
+
+const SalasButton: React.FC = () => (
+  <button
+    onClick={() => window.location.href = "/home"}
+    className="inline-flex items-center gap-3 px-8 py-3 bg-blue-700 text-white rounded-full font-bold text-lg shadow-lg hover:bg-blue-800 hover:scale-105 transition-all duration-200 cursor-pointer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 17v-2a8 8 0 0116 0v2m-2 4h-2a2 2 0 01-2-2v-4a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2zm-8 0H6a2 2 0 01-2-2v-4a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2z" />
+    </svg>
+    IR A LAS SALAS
+  </button>
+);
+
+export default SalasButton;
