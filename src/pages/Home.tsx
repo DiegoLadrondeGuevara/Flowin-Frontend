@@ -75,6 +75,15 @@ const Home: React.FC = () => {
           <FlowInLogo className="mx-auto mb-4" />
         </div>
 
+      <div className="max-w-6xl mx-auto mb-6 text-left">
+        <button
+          onClick={() => navigate("/crear-sala")}
+          className="bg-blue-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-blue-600 transition"
+        >
+          + Crear Sala
+        </button>
+      </div>
+
         {/* Cards Grid */}
         <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
           {salas.map((sala) => (

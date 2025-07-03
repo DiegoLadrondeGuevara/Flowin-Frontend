@@ -7,6 +7,7 @@ import Perfil from './pages/Perfil';
 import EditarPerfil from './pages/EditarPerfil';
 import ReproductorTest from './pages/ReproductorTest';
 import RedirectToStart from './components/RedirectToStart';
+import CrearSalaPage from './pages/CrearSalaPage';
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/usuario/registrarse" element={<Signup />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/sala" element={<Sala />} />
         <Route path="/seleccion-artistas" element={<EditarPerfil />} />
         <Route path="/usuario/perfil" element={<Perfil />} />
         <Route path="*" element={<Navigate to="/auth/login" replace />} />
+        <Route path="/crear-sala" element={<CrearSalaPage />} />
+        <Route path="/sala/:id" element={<Sala />} />
       </Routes>
     </BrowserRouter>
   );
