@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router";
 import FlowInLogo from "../components/FlowInLogo";
 import { cancionesData } from "../pages/Sala"; // Ajusta la ruta si es necesario
+import { obtenerSalas } from "../api";
 
 interface SalaApi {
   id: number;
@@ -17,27 +18,50 @@ interface SalaApi {
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [salas, setSalas] = useState<SalaApi[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-  const fetchSalas = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/sala/buscar`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      console.log("Salas recibidas:", data); // <-- Agrega esto
-      setSalas(data);
-    } catch {
-      setSalas([]);
-    }
-  };
-  fetchSalas();
-}, []);
+    const fetchSalas = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await obtenerSalas();
+        console.log("Salas recibidas:", data);
+        setSalas(data);
+      } catch (err) {
+        console.error("Error al obtener salas:", err);
+        
+        // Si es un error 403 o de conexión, navegar a la página de error
+        if (err instanceof Error) {
+          if (err.message.includes('403') || err.message.includes('connection:')) {
+            navigate('/error', {
+              state: {
+                errorType: err.message.includes('403') ? 'forbidden' : 'connection',
+                message: err.message,
+                statusCode: err.message.includes('403') ? 403 : undefined,
+              },
+            });
+            return; // No mostrar error local, navegar a página de error
+          }
+        }
+        
+        // Para otros errores, mostrar error local
+        setError(err instanceof Error ? err.message : "Error al cargar las salas");
+        setSalas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchSalas();
+  }, [navigate]); // Solo navigate como dependencia
 
   const getArtista = (canciones: string[]) => {
     if (!canciones || canciones.length === 0) return "Desconocido";
-    const cancion = cancionesData[canciones[0]];
+    // Usar la última canción añadida (última en el array)
+    const ultimaCancion = canciones[canciones.length - 1];
+    const cancion = cancionesData[ultimaCancion];
     return cancion?.artistas?.join(", ") || "Desconocido";
   };
 
@@ -62,20 +86,37 @@ const Home: React.FC = () => {
 
         {/* Cards Grid */}
         <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
-  {salas.length === 0 && (
-    <div className="text-gray-500 text-xl mt-12">No hay salas disponibles.</div>
-  )}
-  {salas.map((sala) => (
-    <SalaCard
-      key={sala.id}
-      nombre={sala.nombre}
-      personas={sala.usuariosConectados?.length || 0}
-      genero={sala.genero?.[0] || "Sin género"}
-      artista={getArtista(sala.canciones)}
-      onEntrar={() => navigate(`/sala/${sala.id}`)}
-    />
-  ))}
-</div>
+          {loading && (
+            <div className="text-gray-500 text-xl mt-12">Cargando salas...</div>
+          )}
+          
+          {error && (
+            <div className="text-red-500 text-xl mt-12">
+              Error: {error}
+              <button
+                onClick={() => window.location.reload()}
+                className="block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                Reintentar
+              </button>
+            </div>
+          )}
+          
+          {!loading && !error && salas.length === 0 && (
+            <div className="text-gray-500 text-xl mt-12">No hay salas disponibles.</div>
+          )}
+          
+              {!loading && !error && salas.map((sala) => (
+              <SalaCard
+                key={sala.id}
+                nombre={sala.nombre}
+                personas={sala.usuariosConectados?.length || 0}
+                genero={sala.genero && sala.genero.length > 0 ? sala.genero.join(", ") : "Sin género"}
+                artista={getArtista(sala.canciones)}
+                onEntrar={() => navigate(`/sala/${sala.id}`)}
+              />
+              ))}
+        </div>
       </div>
     </>
   );

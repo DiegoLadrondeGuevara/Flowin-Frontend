@@ -160,13 +160,36 @@ const Sala = () => {
     state.salaId?.toString() || params.id || ""
   );
   const [salaNombre, setSalaNombre] = useState(state.nombre || "");
-  const [, setArtistas] = useState(state.artistas || "");  const [canciones, setCanciones] = useState<Cancion[]>([]);
+  const [artistas, setArtistas] = useState(state.artistas || "");
+  const [canciones, setCanciones] = useState<Cancion[]>([]);
   const [urlActual, setUrlActual] = useState<string>("");
   const [mensaje, setMensaje] = useState("");
   const [status, setStatus] = useState("");
   const [mensajes, setMensajes] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [, setUsuariosConectados] = useState<UsuarioConectado[]>(state.usuariosConectados || []);
+
+  // Función para actualizar la canción y el artista
+  const cambiarCancion = (nuevaUrl: string) => {
+    setUrlActual(nuevaUrl);
+    
+    // Buscar la canción en las canciones disponibles o en cancionesData
+    const cancionSeleccionada = cancionesDisponibles.find(c => c.url === nuevaUrl) || 
+                               Object.entries(cancionesData).find(([, data]) => data.url === nuevaUrl);
+    
+    if (cancionSeleccionada) {
+      let nuevosArtistas: string;
+      if (Array.isArray(cancionSeleccionada)) {
+        // Es del formato cancionesData
+        nuevosArtistas = cancionSeleccionada[1].artistas.join(", ");
+      } else {
+        // Es del formato cancionesDisponibles
+        nuevosArtistas = cancionSeleccionada.artistas.join(", ");
+      }
+      setArtistas(nuevosArtistas);
+      console.log("Artista actualizado a:", nuevosArtistas);
+    }
+  };
 
 
   const stompClientRef = useRef<Client | null>(null);
@@ -183,10 +206,12 @@ useEffect(() => {
     if (state.canciones && state.canciones.length > 0) {
       const cancionesBackend = state.canciones.map((nombre: string) => obtenerCancion(nombre));
       setCanciones(cancionesBackend);
-      setUrlActual(cancionesBackend[0]?.url || "");
-      setUrlActual(cancionesBackend[0]?.url || "");
+      const primeraCancion = cancionesBackend[0];
+      if (primeraCancion) {
+        setUrlActual(primeraCancion.url);
+        setArtistas(primeraCancion.artistas.join(", "));
+      }
       setSalaNombre(state.nombre || "");
-      setArtistas(state.artistas || "");
       setUsuariosConectados(state.usuariosConectados || []);
     } else if (salaId && token) {
       // Si entras directo por URL, pide los datos al backend
@@ -198,12 +223,15 @@ useEffect(() => {
         })
         .then((res) => {
           setSalaNombre(res.data.nombre || "");
-          setArtistas(res.data.artistas || "");
           const cancionesBackend = (res.data.canciones || []).map(
             (nombre: string) => obtenerCancion(nombre)
           );
           setCanciones(cancionesBackend);
-          setUrlActual(cancionesBackend[0]?.url || "");
+          const primeraCancion = cancionesBackend[0];
+          if (primeraCancion) {
+            setUrlActual(primeraCancion.url);
+            setArtistas(primeraCancion.artistas.join(", "));
+          }
           setUsuariosConectados(res.data.usuariosConectados || []);
         })
         .catch(() => {
@@ -300,11 +328,7 @@ useEffect(() => {
               <div className="">
                 <ModernAudioPlayer
                   title={salaNombre || "Sala de Música"}
-                  artist={
-                    (canciones.find((c) => c.url === urlActual)?.artistas.join(", ") ||
-                      cancionesDisponibles.find((c) => c.url === urlActual)?.artistas.join(", ") ||
-                      "Artista Desconocido")
-                  }
+                  artist={artistas || "Artista Desconocido"}
                   audioSrc={urlActual}
                 />
               </div>
@@ -324,7 +348,7 @@ useEffect(() => {
                   .map((c) => (
                     <div key={c.nombre} className="flex flex-col items-center">
                       <button
-                        onClick={() => setUrlActual(c.url)}
+                        onClick={() => cambiarCancion(c.url)}
                         className={`px-6 py-3 rounded-2xl text-lg font-bold shadow ${
                           urlActual === c.url
                             ? "bg-white text-blue-700 border-2 border-blue-700"
@@ -345,7 +369,7 @@ useEffect(() => {
                 <ListaCancionesModal
                   canciones={cancionesDisponibles}
                   urlActual={urlActual}
-                  onSelect={(c: Cancion) => setUrlActual(c.url)}
+                  onSelect={(c: Cancion) => cambiarCancion(c.url)}
                   onClose={() => setShowModal(false)}
                 />
               )}
