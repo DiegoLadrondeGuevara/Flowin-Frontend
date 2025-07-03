@@ -29,7 +29,7 @@ export type Cancion = {
   artistas: string[];
 };
 
-const cancionesData: Record<string, { url: string; artistas: string[] }> = {
+export const cancionesData: Record<string, { url: string; artistas: string[] }> = {
   "Bohemian Rhapsody": {
     url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/rock/queen/bohemianRapsody.mp3",
     artistas: ["Queen"],
