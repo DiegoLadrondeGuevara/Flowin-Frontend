@@ -9,11 +9,22 @@ interface Artista {
 
 const ARTISTAS: Artista[] = [
   { nombre: 'Queen', imagen: 'src/assets/perfiles/queen.jpg' },
-  { nombre: 'Taylor Swift', imagen: 'src/assets/perfiles/taylor_swift.jpg' },
-  { nombre: 'Bad Bunny', imagen: 'src/assets/perfiles/bad_bunny.jpg' },
-  { nombre: 'The Beatles', imagen: 'src/assets/perfiles/the_beatles.jpg' },
-  { nombre: 'Dua Lipa', imagen: 'src/assets/perfiles/dua_lipa.jpg' },
+  { nombre: 'AC/DC', imagen: 'src/assets/perfiles/acdc.jpg' },
+  { nombre: 'Red Hot Chili Peppers', imagen: 'src/assets/perfiles/red_hot_chili_peppers.jpg' },
   { nombre: 'Post Malone', imagen: 'src/assets/perfiles/post_malone.jpg' },
+  { nombre: 'Ludwig van Beethoven', imagen: 'src/assets/perfiles/beethoven.jpg' },
+  { nombre: 'Wolfgang Amadeus Mozart', imagen: 'src/assets/perfiles/mozart.jpg' },
+  { nombre: 'Avicii', imagen: 'src/assets/perfiles/avicii.jpg' },
+  { nombre: 'LMFAO', imagen: 'src/assets/perfiles/lmfao.jpg' },
+  { nombre: 'Dave Brubeck', imagen: 'src/assets/perfiles/dave_brubeck.jpg' },
+  { nombre: 'Louis Armstrong', imagen: 'src/assets/perfiles/louis_armstrong.jpg' },
+  { nombre: 'Daddy Yankee', imagen: 'src/assets/perfiles/daddy_yankee.jpg' },
+  { nombre: 'Metallica', imagen: 'src/assets/perfiles/metallica.jpg' },
+  { nombre: 'Lady Gaga', imagen: 'src/assets/perfiles/lady_gaga.jpg' },
+  { nombre: 'Michael Jackson', imagen: 'src/assets/perfiles/michael_jackson.jpg' },
+  { nombre: 'Oscar D\'León', imagen: 'src/assets/perfiles/oscar_dleon.jpg' },
+  { nombre: 'Travis Scott', imagen: 'src/assets/perfiles/travis_scott.jpg' },
+  { nombre: 'JACKBOYS', imagen: 'src/assets/perfiles/jackboys.jpg' },
 ];
 
 const EditarPerfil: React.FC = () => {

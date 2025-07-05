@@ -110,6 +110,29 @@ export async function actualizarGustosMusicales(gustos: string[]) {
   }
 }
 
+// ✅ Obtener salas disponibles
+export async function obtenerSalas() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("No se encontró el token de autenticación");
+  }
+
+  try {
+    const response = await axios.get(
+      `${BACKEND_URL}/sala/buscar`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(extractErrorMessage(error));
+  }
+}
+
 // Utils
 function extractToken(bearerString: string): string {
   if (bearerString?.startsWith("Bearer ")) {
@@ -120,12 +143,31 @@ function extractToken(bearerString: string): string {
 
 function extractErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+    
+    // Errores específicos por código de estado
+    if (status === 403) {
+      throw new Error("403: Acceso denegado. Tu sesión puede haber expirado.");
+    }
+    if (status === 404) {
+      throw new Error("404: Recurso no encontrado.");
+    }
+    if (status && status >= 500) {
+      throw new Error(`${status}: Error del servidor. Intenta nuevamente más tarde.`);
+    }
+    
     if (typeof error.response?.data === "string") {
       return error.response.data;
     }
     if (typeof error.response?.data?.message === "string") {
       return error.response.data.message;
     }
+    
+    // Error de red/conexión
+    if (error.code === 'NETWORK_ERROR' || error.code === 'ERR_NETWORK') {
+      throw new Error("connection: No se pudo conectar con el servidor. Verifica tu conexión a internet.");
+    }
+    
     return error.message || "Error desconocido con Axios";
   }
 
