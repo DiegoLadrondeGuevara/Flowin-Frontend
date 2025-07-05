@@ -45,17 +45,32 @@ const CrearSalaPage: React.FC = () => {
     setMensaje(null);
 
     if (!token) {
-    setError("No tienes sesión iniciada. Por favor inicia sesión.");
-    return;
-  }
+      setError("No tienes sesión iniciada. Por favor inicia sesión.");
+      navigate("/auth/login");
+      return;
+    }
+
+    // Verificar si el token parece válido (basic check)
+    if (token.length < 10) {
+      setError("Token de sesión inválido. Por favor inicia sesión nuevamente.");
+      localStorage.removeItem("token");
+      navigate("/auth/login");
+      return;
+    }
+
+    // Validar que se haya seleccionado al menos una canción
+    if (!cancionSeleccionada) {
+      setError("Por favor selecciona una canción para crear la sala.");
+      return;
+    }
 
     try {
       const payload = {
         nombre,
         genero: generos,
-        canciones: cancionSeleccionada ? [cancionSeleccionada] : [],
+        canciones: cancionSeleccionada || "", // Enviar como string, no como array
       };
-
+      
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/sala`,
         payload,
@@ -75,6 +90,15 @@ const CrearSalaPage: React.FC = () => {
       });
     } catch (err) {
       const error = err as AxiosError<{ message?: string; error?: string }>;
+      
+      // Manejo específico para error 403
+      if (error.response?.status === 403) {
+        setError("Acceso denegado. Tu sesión puede haber expirado. Por favor, inicia sesión nuevamente.");
+        localStorage.removeItem("token");
+        navigate("/auth/login");
+        return;
+      }
+      
       setError(
         error.response?.data?.message ||
         error.response?.data?.error ||
