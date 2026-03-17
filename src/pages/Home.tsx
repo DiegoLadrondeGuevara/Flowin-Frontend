@@ -3,7 +3,7 @@ import SalaCard from "../components/ui/SalaCard";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router";
 import FlowInLogo from "../components/FlowInLogo";
-import { cancionesData } from "../pages/Sala"; // Ajusta la ruta si es necesario
+import { cancionesData } from "../data/cancionesData";
 import { obtenerSalas } from "../api";
 
 interface SalaApi {

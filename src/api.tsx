@@ -94,7 +94,7 @@ export async function actualizarGustosMusicales(gustos: string[]) {
   }
 
   try {
-    const response = await axios.put(
+    const response = await axios.patch(
       `${BACKEND_URL}/usuario/actualizar-gustosMusicales`,
       { gustosMusicales: gustos },
       {

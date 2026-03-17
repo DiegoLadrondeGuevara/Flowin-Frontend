@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface ChatMessage {
   username: string;
@@ -10,27 +12,44 @@ interface ChatMessage {
 
 export const useChat = (
   salaId: number,
-  onMessageReceived: (mensajes: ChatMessage[]) => void,
   token: string
 ) => {
   const clientRef = useRef<Client | null>(null);
+  const [mensajes, setMensajes] = useState<ChatMessage[]>([]);
+  const [status, setStatus] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!token || !salaId) return;
+
     const client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws-chat'),
+      webSocketFactory: () => new SockJS(`${BACKEND_URL}/ws-chat`),
       reconnectDelay: 5000,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
       onConnect: () => {
-        console.log('Conectado al WebSocket');
+        setStatus('¡Conectado al chat!');
+        setError(null);
+
+        // Subscribe to new messages (single message, not the whole list)
         client.subscribe(`/topic/sala/${salaId}`, (message) => {
-          const mensajes = JSON.parse(message.body);
-          onMessageReceived(mensajes);
+          const nuevoMensaje: ChatMessage = JSON.parse(message.body);
+          setMensajes(prev => [...prev, nuevoMensaje]);
+        });
+
+        // Subscribe to errors
+        client.subscribe(`/topic/error/${salaId}`, (message) => {
+          setError(message.body);
         });
       },
       onStompError: (frame) => {
         console.error('Error STOMP:', frame);
+        setStatus('Error de conexión');
+      },
+      onWebSocketError: (event) => {
+        console.error('WebSocket error:', event);
+        setStatus('Error de WebSocket');
       },
     });
 
@@ -40,9 +59,9 @@ export const useChat = (
     return () => {
       client.deactivate();
     };
-  }, [salaId, token, onMessageReceived]);
+  }, [salaId, token]); // Stable dependencies only
 
-  const sendMessage = (contenido: string) => {
+  const sendMessage = useCallback((contenido: string) => {
     if (clientRef.current && clientRef.current.connected) {
       clientRef.current.publish({
         destination: '/app/chat.send',
@@ -50,7 +69,7 @@ export const useChat = (
         headers: { Authorization: `Bearer ${token}` },
       });
     }
-  };
+  }, [salaId, token]);
 
-  return { sendMessage };
+  return { mensajes, sendMessage, status, error };
 };
