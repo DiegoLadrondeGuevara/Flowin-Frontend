@@ -59,14 +59,14 @@ const Perfil: React.FC = () => {
   if (!usuario) return <div>No hay datos de usuario.</div>;
 
   return (
-    <>
-    <Navbar hidePerfilButton />
-    <div className="mt-7 flex justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 pb-12">
+      <Navbar hidePerfilButton />
+      <div className="mt-7 flex justify-center relative z-10">
       <FlowInLogo className=" mx-7" />
       <SalasButton />
     </div>
-    <PerfilCard usuario={usuario} />
-  </>
+      <PerfilCard usuario={usuario} />
+    </div>
   );
 };
 

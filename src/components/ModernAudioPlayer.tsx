@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ModernAudioPlayerProps {
   title: string;
@@ -29,6 +29,7 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
   isHost = true,
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [hasJoined, setHasJoined] = useState(isHost);
 
   // Sync playback for listeners (non-host)
   useEffect(() => {
@@ -40,14 +41,14 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
       audio.currentTime = syncTime;
     }
 
-    if (syncPlaying !== undefined) {
+    if (syncPlaying !== undefined && hasJoined) {
       if (syncPlaying && audio.paused) {
         audio.play().catch(() => {});
       } else if (!syncPlaying && !audio.paused) {
         audio.pause();
       }
     }
-  }, [syncTime, syncPlaying, isHost]);
+  }, [syncTime, syncPlaying, isHost, hasJoined]);
 
   // Load new source when audioSrc changes
   useEffect(() => {
@@ -75,7 +76,27 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center relative min-h-[300px] justify-center">
+      {!hasJoined && !isHost && (
+        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center z-50 rounded-3xl border border-white/10 p-6">
+          <button 
+            onClick={() => {
+              setHasJoined(true);
+              if (syncPlaying && audioRef.current) {
+                audioRef.current.play().catch(() => {});
+              }
+            }}
+            className="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-8 rounded-full shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:scale-105 transition-all animate-bounce flex items-center gap-3"
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path></svg>
+            Sintonizar Radio
+          </button>
+          <p className="text-white/70 mt-4 text-sm max-w-xs text-center font-medium">
+            El navegador requiere que hagas clic para sincronizarte con el Host.
+          </p>
+        </div>
+      )}
+
       <h2 className="text-6xl font-extrabold text-white mb-8">{title}</h2>
 
       {/* CSS-powered audio visualizer — zero React re-renders */}

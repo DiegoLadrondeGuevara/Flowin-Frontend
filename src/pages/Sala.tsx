@@ -1,5 +1,5 @@
 import ListaCancionesModal from "../components/ListaCanciones";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import ModernAudioPlayer from "../components/ModernAudioPlayer";
 import Navbar from "../components/Navbar";
 import SalirSalaButton from "../components/SalirSalaButton";
@@ -32,6 +32,7 @@ const Sala = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const state = useMemo(
     () =>
@@ -164,6 +165,11 @@ const Sala = () => {
     setMensaje("");
   };
 
+  useEffect(() => {
+    // Auto-scroll al final del chat
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [mensajes]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -274,8 +280,9 @@ const Sala = () => {
                 <span className="text-slate-200 text-sm">{m.contenido}</span>
               </div>
             ))}
+            <div ref={messagesEndRef} />
             {error && (
-              <div className="bg-red-100 text-red-700 p-3 rounded-lg border border-red-200">
+              <div className="bg-red-900/20 text-red-400 p-3 rounded-xl border border-red-800/50">
                 <strong>Error:</strong> {error}
               </div>
             )}
