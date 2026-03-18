@@ -7,24 +7,28 @@ interface Artista {
   imagen: string;
 }
 
+const BASE_IMG_URL = import.meta.env.VITE_S3_IMAGES_URL || "https://flowin-20.s3.us-east-1.amazonaws.com/perfiles";
+
 const ARTISTAS: Artista[] = [
-  { nombre: 'Queen', imagen: 'src/assets/perfiles/queen.jpg' },
-  { nombre: 'AC/DC', imagen: 'src/assets/perfiles/acdc.jpg' },
-  { nombre: 'Red Hot Chili Peppers', imagen: 'src/assets/perfiles/red_hot_chili_peppers.jpg' },
-  { nombre: 'Post Malone', imagen: 'src/assets/perfiles/post_malone.jpg' },
-  { nombre: 'Ludwig van Beethoven', imagen: 'src/assets/perfiles/beethoven.jpg' },
-  { nombre: 'Wolfgang Amadeus Mozart', imagen: 'src/assets/perfiles/mozart.jpg' },
-  { nombre: 'Avicii', imagen: 'src/assets/perfiles/avicii.jpg' },
-  { nombre: 'LMFAO', imagen: 'src/assets/perfiles/lmfao.jpg' },
-  { nombre: 'Dave Brubeck', imagen: 'src/assets/perfiles/dave_brubeck.jpg' },
-  { nombre: 'Louis Armstrong', imagen: 'src/assets/perfiles/louis_armstrong.jpg' },
-  { nombre: 'Daddy Yankee', imagen: 'src/assets/perfiles/daddy_yankee.jpg' },
-  { nombre: 'Metallica', imagen: 'src/assets/perfiles/metallica.jpg' },
-  { nombre: 'Lady Gaga', imagen: 'src/assets/perfiles/lady_gaga.jpg' },
-  { nombre: 'Michael Jackson', imagen: 'src/assets/perfiles/michael_jackson.jpg' },
-  { nombre: 'Oscar D\'León', imagen: 'src/assets/perfiles/oscar_dleon.jpg' },
-  { nombre: 'Travis Scott', imagen: 'src/assets/perfiles/travis_scott.jpg' },
-  { nombre: 'JACKBOYS', imagen: 'src/assets/perfiles/jackboys.jpg' },
+  { nombre: 'Milo J', imagen: `${BASE_IMG_URL}/milo_j.jpg` },
+  { nombre: 'Queen', imagen: `${BASE_IMG_URL}/queen.jpg` },
+  { nombre: 'AC/DC', imagen: `${BASE_IMG_URL}/acdc.jpg` },
+  { nombre: 'Red Hot Chili Peppers', imagen: `${BASE_IMG_URL}/red_hot_chili_peppers.jpg` },
+  { nombre: 'Post Malone', imagen: `${BASE_IMG_URL}/post_malone.jpg` },
+  { nombre: 'Ludwig van Beethoven', imagen: `${BASE_IMG_URL}/beethoven.jpg` },
+  { nombre: 'Wolfgang Amadeus Mozart', imagen: `${BASE_IMG_URL}/mozart.jpg` },
+  { nombre: 'Avicii', imagen: `${BASE_IMG_URL}/avicii.jpg` },
+  { nombre: 'LMFAO', imagen: `${BASE_IMG_URL}/lmfao.jpg` },
+  { nombre: 'Mi Novia❤️', imagen: `${BASE_IMG_URL}/novia.jpg` },
+  { nombre: 'Dave Brubeck', imagen: `${BASE_IMG_URL}/dave_brubeck.jpg` },
+  { nombre: 'Louis Armstrong', imagen: `${BASE_IMG_URL}/louis_armstrong.jpg` },
+  { nombre: 'Daddy Yankee', imagen: `${BASE_IMG_URL}/daddy_yankee.jpg` },
+  { nombre: 'Metallica', imagen: `${BASE_IMG_URL}/metallica.jpg` },
+  { nombre: 'Lady Gaga', imagen: `${BASE_IMG_URL}/lady_gaga.jpg` },
+  { nombre: 'Michael Jackson', imagen: `${BASE_IMG_URL}/michael_jackson.jpg` },
+  { nombre: 'Oscar D\'León', imagen: `${BASE_IMG_URL}/oscar_dleon.jpg` },
+  { nombre: 'Travis Scott', imagen: `${BASE_IMG_URL}/travis_scott.jpg` },
+  { nombre: 'JACKBOYS', imagen: `${BASE_IMG_URL}/jackboys.jpg` },
 ];
 
 const EditarPerfil: React.FC = () => {
@@ -40,18 +44,18 @@ const EditarPerfil: React.FC = () => {
   };
 
   const handleContinuar = async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    await actualizarArtistasFavoritos(seleccionados);
-    setShowVentana(true); // Mostrar la ventanita
-  } catch (err) {
-    setError('Error al actualizar artistas');
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError(null);
+    try {
+      await actualizarArtistasFavoritos(seleccionados);
+      setShowVentana(true); // Mostrar la ventanita
+    } catch (err) {
+      setError('Error al actualizar artistas');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col items-center py-16 font-poppins">

@@ -1,11 +1,11 @@
 import React from "react";
 import type { ArtistaFavorito } from "./PerfilCard";
 
-const artistaImages = import.meta.glob('../assets/perfiles/*.jpg', { eager: true, query: '?url', import: 'default' });
+const BASE_IMG_URL = import.meta.env.VITE_S3_IMAGES_URL || "https://flowin-20.s3.us-east-1.amazonaws.com/perfiles";
 
 const getArtistaFoto = (nombre: string) => {
-  const fileName = `../assets/perfiles/${nombre.replace(/\s+/g, "_").toLowerCase()}.jpg`;
-  return artistaImages[fileName] as string | undefined;
+  const fileName = `${nombre.replace(/\s+/g, "_").toLowerCase()}.jpg`;
+  return `${BASE_IMG_URL}/${fileName}`;
 };
 
 const ArtistaFavoritoItem: React.FC<ArtistaFavorito> = ({ nombre, genero, fotoUrl, top }) => {
