@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
-import { cancionesData } from "../data/cancionesData";
+import { cancionesArray } from "../data/cancionesData";
 
 const CrearSalaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,10 +13,11 @@ const CrearSalaPage: React.FC = () => {
 
   const token = localStorage.getItem("token");
 
-  const cancionesDisponibles = Object.entries(cancionesData).map(([nombre, data]) => ({
-    nombre,
-    url: data.url,
-    artistas: data.artistas.join(", ")
+  const cancionesDisponibles = cancionesArray.map(c => ({
+    nombre: c.nombre,
+    url: c.url,
+    artistas: c.artistas.join(", "),
+    genero: c.genero
   }));
 
   const [cancionSeleccionada, setCancionSeleccionada] = useState<string>("");
@@ -162,7 +163,12 @@ const CrearSalaPage: React.FC = () => {
                     name="cancion"
                     value={cancion.nombre}
                     checked={cancionSeleccionada === cancion.nombre}
-                    onChange={() => setCancionSeleccionada(cancion.nombre)}
+                    onChange={() => {
+                      setCancionSeleccionada(cancion.nombre);
+                      if (cancion.genero && cancion.genero.length > 0) {
+                        setGeneros(cancion.genero);
+                      }
+                    }}
                     className="accent-blue-500 w-4 h-4"
                   />
                   <div className="ml-4 flex flex-col">

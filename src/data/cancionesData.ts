@@ -2,6 +2,7 @@ export type Cancion = {
   nombre: string;
   url: string;
   artistas: string[];
+  genero: string[];
 };
 
 const BASE_URL = import.meta.env.VITE_S3_BUCKET_URL || "https://flowin-20.s3.us-east-1.amazonaws.com/songs";
@@ -60,3 +61,18 @@ export const cancionesData: Record<string, { url: string; artistas: string[] }> 
   "Nino": { url: `${BASE_URL}/trap/milo_j_nino.mp3`, artistas: ["Milo J"] },
   "Goosebumps": { url: `${BASE_URL}/trap/travis_scott_goosebumps_ft_kendrick_lamar.mp3`, artistas: ["Travis Scott"] }
 };
+
+export const cancionesArray: Cancion[] = Object.entries(cancionesData).map(([nombre, data]) => {
+  const parts = data.url.split('/');
+  const rawGenero = parts[parts.length - 2];
+  let capitalized = rawGenero.charAt(0).toUpperCase() + rawGenero.slice(1);
+  if (capitalized === "Clasica") capitalized = "Clásica";
+  if (capitalized === "Electronica") capitalized = "Electrónica";
+  
+  return {
+    nombre,
+    url: data.url,
+    artistas: data.artistas,
+    genero: [capitalized]
+  };
+});

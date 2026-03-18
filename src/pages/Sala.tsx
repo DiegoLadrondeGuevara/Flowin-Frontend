@@ -78,6 +78,22 @@ const Sala = () => {
   } = useMusicSync(Number(salaId), token, isHost);
 
   const [mensaje, setMensaje] = useState("");
+  const [isRoomClosed, setIsRoomClosed] = useState(false);
+
+  // Interceptar la caída de la sala
+  useEffect(() => {
+    if (mensajes.length > 0 && !isHost) {
+      const ultimo = mensajes[mensajes.length - 1];
+      try {
+        if (ultimo.contenido.includes('"type":"ROOM_CLOSED"')) {
+          const payload = JSON.parse(ultimo.contenido);
+          if (payload.type === "ROOM_CLOSED") {
+            setIsRoomClosed(true);
+          }
+        }
+      } catch (e) {}
+    }
+  }, [mensajes, isHost]);
 
   // Change current song (host action)
   const cambiarCancion = (nuevaUrl: string) => {
@@ -180,6 +196,28 @@ const Sala = () => {
     // Auto-scroll al final del chat
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
+
+  if (isRoomClosed) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-950 to-slate-900 flex flex-col justify-center items-center text-white px-6 font-poppins relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,_rgba(220,38,38,0.1)_0%,_transparent_60%)] rounded-full pointer-events-none"></div>
+        
+        <div className="bg-slate-900/80 backdrop-blur-xl border border-red-500/20 p-10 rounded-3xl shadow-[0_8px_32px_rgba(220,38,38,0.2)] text-center max-w-lg w-full relative z-10">
+          <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <h2 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-red-200 mb-4 tracking-tight">¡Transmisión Finalizada!</h2>
+          <p className="text-slate-300 font-medium text-lg leading-relaxed mb-8">El Host ha cerrado esta sala. La conexión ha sido desconectada para todos los oyentes.</p>
+          <button
+            onClick={() => navigate("/home")}
+            className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 rounded-full shadow-[0_4px_24px_rgba(220,38,38,0.4)] hover:shadow-[0_8px_32px_rgba(220,38,38,0.6)] hover:-translate-y-1 transition-all"
+          >
+            ← Volver al Menú Principal
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -285,6 +323,7 @@ const Sala = () => {
               <SalirSalaButton
                 salaId={salaId}
                 token={token}
+                isHost={isHost}
                 className="text-sm shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
               />
             </div>

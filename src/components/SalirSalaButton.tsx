@@ -5,12 +5,14 @@ import axios, { AxiosError } from "axios";
 interface SalirSalaButtonProps {
   salaId: string | number;
   token: string;
+  isHost?: boolean;
   className?: string;
 }
 
 const SalirSalaButton: React.FC<SalirSalaButtonProps> = ({ 
   salaId, 
-  token, 
+  token,
+  isHost = false,
   className = "" 
 }) => {
   const navigate = useNavigate();
@@ -61,7 +63,13 @@ const SalirSalaButton: React.FC<SalirSalaButtonProps> = ({
   };
 
   const handleClick = () => {
-    const confirmed = window.confirm("¿Estás seguro de que quieres salir de esta sala?");
+    let confirmed = false;
+    if (isHost) {
+      confirmed = window.confirm("⚠️ ¿Estás seguro de que quieres salir?\n\nAl salirte, tu sala mágica se cerrará automáticamente para todos los oyentes.");
+    } else {
+      confirmed = window.confirm("¿Estás seguro de que quieres salir de esta sala?");
+    }
+    
     if (confirmed) {
       handleSalirSala();
     }

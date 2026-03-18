@@ -22,8 +22,8 @@ const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onRequest, 
     return canciones.filter(c => {
       const matchText = c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
                         c.artistas.some((a: string) => a.toLowerCase().includes(searchTerm.toLowerCase()));
-      // If we had genres in 'Cancion' type from 'cancionesData' we would filter it here too.
-      return matchText;
+      const matchGenre = !selectedGenre || (c.genero && c.genero.includes(selectedGenre));
+      return matchText && matchGenre;
     });
   }, [canciones, searchTerm, selectedGenre]);
 
