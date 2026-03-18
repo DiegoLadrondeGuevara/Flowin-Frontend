@@ -57,6 +57,20 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
     }
   }, [audioSrc]);
 
+  // Live Sync Heartbeat for Listeners
+  useEffect(() => {
+    if (!isHost || !onSeeked || !audioRef.current) return;
+
+    // We broadcast the host's exact audio position every 4 seconds to sync late-joiners.
+    const interval = setInterval(() => {
+      if (audioRef.current && !audioRef.current.paused) {
+        onSeeked(audioRef.current.currentTime);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isHost, onSeeked]);
+
   const handlePlay = () => {
     if (isHost && onPlay && audioRef.current) {
       onPlay(audioRef.current.currentTime);

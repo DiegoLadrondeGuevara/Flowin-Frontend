@@ -3,8 +3,12 @@ import SalaCard from "../components/ui/SalaCard";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router";
 import FlowInLogo from "../components/FlowInLogo";
-import { cancionesData } from "../data/cancionesData";
 import { obtenerSalas } from "../api";
+import { cancionesData } from "../data/cancionesData";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface SalaApi {
   id: number;
@@ -56,6 +60,35 @@ const Home: React.FC = () => {
     
     fetchSalas();
   }, [navigate]); // Solo navigate como dependencia
+
+  // STOMP WebSocket for real-time room updates
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const client = new Client({
+      webSocketFactory: () => new SockJS(`${BACKEND_URL}/ws-chat`),
+      reconnectDelay: 5000,
+      connectHeaders: { Authorization: `Bearer ${token}` },
+      onConnect: () => {
+        client.subscribe("/topic/salas", (message) => {
+          if (message.body) {
+            try {
+              const updatedSalas = JSON.parse(message.body);
+              setSalas(updatedSalas);
+            } catch (err) {
+              console.error("Error parsing real-time salas update:", err);
+            }
+          }
+        });
+      },
+    });
+
+    client.activate();
+    return () => {
+      client.deactivate();
+    };
+  }, []);
 
   const getArtista = (canciones: string[]) => {
     if (!canciones || canciones.length === 0) return "Desconocido";

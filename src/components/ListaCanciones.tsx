@@ -4,11 +4,13 @@ import type { Cancion } from "../data/cancionesData";
 type Props = {
   canciones: Cancion[];
   onSelect: (c: Cancion) => void;
+  onRequest?: (c: Cancion) => void;
   onClose: () => void;
   urlActual: string;
+  isHost?: boolean;
 };
 
-const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onClose, urlActual }) => {
+const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onRequest, onClose, urlActual, isHost = true }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
 
@@ -31,7 +33,9 @@ const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onClose, ur
         <div className="absolute top-[-150px] right-[-150px] w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.15)_0%,_transparent_70%)] rounded-full pointer-events-none"></div>
         
         <div className="flex justify-between items-center mb-6 relative z-10">
-          <h2 className="text-2xl font-black text-white px-2">🎵 Catálogo de Tracks</h2>
+          <h2 className="text-2xl font-black text-white px-2">
+            {isHost ? "🎵 Catálogo de Tracks" : "🎵 Pedir Canción al Host"}
+          </h2>
           <button onClick={onClose} className="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-10 h-10 rounded-full flex items-center justify-center transition-all">
             ✕
           </button>
@@ -77,7 +81,11 @@ const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onClose, ur
             filtradas.map((c) => (
               <li key={c.nombre}>
                 <button
-                  onClick={() => { onSelect(c); onClose(); }}
+                  onClick={() => { 
+                    if (isHost) onSelect(c); 
+                    else if (onRequest) onRequest(c);
+                    onClose(); 
+                  }}
                   className={`w-full flex flex-col items-start px-5 py-3 rounded-xl transition-all border ${
                     urlActual === c.url
                       ? "bg-blue-600/20 border-blue-500/50 shadow-inner"
