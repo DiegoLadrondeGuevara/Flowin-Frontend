@@ -36,7 +36,7 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
 
     const audio = audioRef.current;
 
-    if (syncTime !== undefined && Math.abs(audio.currentTime - syncTime) > 2) {
+    if (syncTime !== undefined && Math.abs(audio.currentTime - syncTime) > 1) {
       audio.currentTime = syncTime;
     }
 
@@ -107,7 +107,7 @@ const ModernAudioPlayer: React.FC<ModernAudioPlayerProps> = ({
         ref={audioRef}
         controls
         src={audioSrc}
-        className="w-full mt-4"
+        className={`w-full mt-4 ${!isHost ? "pointer-events-none opacity-60 grayscale shadow-inner rounded-full" : ""}`}
         onPlay={handlePlay}
         onPause={handlePause}
         onSeeked={handleSeeked}

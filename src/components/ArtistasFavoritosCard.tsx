@@ -4,6 +4,7 @@ import type { ArtistaFavorito } from "./PerfilCard";
 const BASE_IMG_URL = import.meta.env.VITE_S3_IMAGES_URL || "https://flowin-20.s3.us-east-1.amazonaws.com/perfiles";
 
 const getArtistaFoto = (nombre: string) => {
+  if (nombre === "Mi Novia❤️" || nombre.toLowerCase().includes("novia")) return `${BASE_IMG_URL}/novia.jpg`;
   const fileName = `${nombre.replace(/\s+/g, "_").toLowerCase()}.jpg`;
   return `${BASE_IMG_URL}/${fileName}`;
 };

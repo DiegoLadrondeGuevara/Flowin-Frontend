@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { cancionesData } from "../data/cancionesData";
@@ -20,6 +20,20 @@ const CrearSalaPage: React.FC = () => {
   }));
 
   const [cancionSeleccionada, setCancionSeleccionada] = useState<string>("");
+
+  const cancionesDisponiblesFiltradas = useMemo(() => {
+    const activeGenres = generos.filter(g => g.trim().length > 0);
+    if (activeGenres.length === 0) return cancionesDisponibles;
+    
+    return cancionesDisponibles.filter(cancion => {
+      // Filtrar si la URL o el artista contiene el pedazo de texto del género
+      return activeGenres.some(genero => {
+        const query = genero.toLowerCase().trim();
+        return cancion.url.toLowerCase().includes(query) || 
+               cancion.artistas.toLowerCase().includes(query);
+      });
+    });
+  }, [generos]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -124,7 +138,12 @@ const CrearSalaPage: React.FC = () => {
         <div>
           <label className="block font-semibold text-blue-700 mb-1">Canción (elige una para empezar :D)</label>
           <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-lg p-3 bg-blue-50">
-            {cancionesDisponibles.map((cancion) => (
+            {cancionesDisponiblesFiltradas.length === 0 && (
+              <div className="text-gray-500 font-medium text-center my-2">
+                No se encontraron canciones para los géneros escritos.
+              </div>
+            )}
+            {cancionesDisponiblesFiltradas.map((cancion) => (
               <label key={cancion.url} className="flex items-center mb-2 cursor-pointer">
                 <input
                   type="radio"

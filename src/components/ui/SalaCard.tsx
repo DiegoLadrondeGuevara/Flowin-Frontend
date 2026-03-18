@@ -14,7 +14,7 @@ interface SalaCardProps {
 
 const SalaCard: React.FC<SalaCardProps> = ({ nombre, personas, genero, artista, onEntrar }) => {
   return (
-    <Card className="w-80 h-96 relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 border-blue-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer group">
+    <Card className="w-80 h-96 relative overflow-hidden bg-white/20 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,38,135,0.2)] hover:shadow-[0_12px_40px_rgba(31,38,135,0.4)] transition-all duration-500 hover:-translate-y-3 cursor-pointer group rounded-3xl">
       {/* Ondas de fondo con SVG mejoradas */}
       <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-300">
         <svg className="w-full h-full" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
