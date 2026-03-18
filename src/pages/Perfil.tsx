@@ -20,7 +20,9 @@ const Perfil: React.FC = () => {
           setLoading(false);
           return;
         }
-        const res = await fetch("http://23.23.63.26:8080/usuario/perfil", {
+        
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await fetch(`${backendUrl}/usuario/perfil`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

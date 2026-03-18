@@ -54,7 +54,7 @@ const PerfilHeader: React.FC<PerfilHeaderProps> = ({ username, mail, fotoUrl }) 
       </div>
     </div>
     <button 
-        onClick={() => window.location.href = "http://localhost:5173/seleccion-artistas"}
+        onClick={() => window.location.href = "/seleccion-artistas"}
         className="bg-white hover:bg-blue-50 border-none rounded-xl px-8 py-4 font-semibold text-xl text-blue-700 cursor-pointer flex items-center gap-3 shadow transition">
       <span role="img" aria-label="Editar Gustos">✏️</span> Editar
     </button>
