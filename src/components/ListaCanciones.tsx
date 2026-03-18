@@ -22,7 +22,7 @@ const ListaCancionesModal: React.FC<Props> = ({ canciones, onSelect, onRequest, 
     return canciones.filter(c => {
       const matchText = c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
                         c.artistas.some((a: string) => a.toLowerCase().includes(searchTerm.toLowerCase()));
-      const matchGenre = !selectedGenre || (c.genero && c.genero.includes(selectedGenre));
+      const matchGenre = !selectedGenre || (c.genero && c.genero.some(g => g.toLowerCase() === selectedGenre.toLowerCase()));
       return matchText && matchGenre;
     });
   }, [canciones, searchTerm, selectedGenre]);

@@ -27,11 +27,12 @@ const CrearSalaPage: React.FC = () => {
     if (activeGenres.length === 0) return cancionesDisponibles;
     
     return cancionesDisponibles.filter(cancion => {
-      // Filtrar si la URL o el artista contiene el pedazo de texto del género
+      // Filtrar si el nombre de la canción, URL o artista contiene el pedazo de texto
       return activeGenres.some(genero => {
         const query = genero.toLowerCase().trim();
-        return cancion.url.toLowerCase().includes(query) || 
-               cancion.artistas.toLowerCase().includes(query);
+        return cancion.nombre.toLowerCase().includes(query) || 
+               cancion.artistas.toLowerCase().includes(query) ||
+               (cancion.genero && cancion.genero.some(g => g.toLowerCase().includes(query)));
       });
     });
   }, [generos]);
@@ -137,7 +138,7 @@ const CrearSalaPage: React.FC = () => {
             value={generos.join(", ")}
             onChange={handleGeneroChange}
             className="w-full bg-slate-900/50 border border-slate-700 text-white p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 transition-all font-medium"
-            placeholder="Ej: pop, rock, jazz"
+            placeholder="Ej: pop, rock (también puedes buscar por artista o canción)"
           />
         </div>
         <div>

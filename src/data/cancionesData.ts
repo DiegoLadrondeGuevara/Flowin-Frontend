@@ -63,16 +63,29 @@ export const cancionesData: Record<string, { url: string; artistas: string[] }> 
 };
 
 export const cancionesArray: Cancion[] = Object.entries(cancionesData).map(([nombre, data]) => {
-  const parts = data.url.split('/');
-  const rawGenero = parts[parts.length - 2];
-  let capitalized = rawGenero.charAt(0).toUpperCase() + rawGenero.slice(1);
-  if (capitalized === "Clasica") capitalized = "Clásica";
-  if (capitalized === "Electronica") capitalized = "Electrónica";
+  const urlLower = data.url.toLowerCase();
+  let genreMapped = "General";
+  
+  if (urlLower.includes("/clasica/")) genreMapped = "Clásica";
+  else if (urlLower.includes("/electronica/")) genreMapped = "Electrónica";
+  else if (urlLower.includes("/rock/")) genreMapped = "Rock";
+  else if (urlLower.includes("/pop/")) genreMapped = "Pop";
+  else if (urlLower.includes("/latina/")) genreMapped = "Latina";
+  else if (urlLower.includes("/salsa/")) genreMapped = "Salsa";
+  else if (urlLower.includes("/trap/")) genreMapped = "Trap";
+  else if (urlLower.includes("/jazz/")) genreMapped = "Jazz";
+  else if (urlLower.includes("/country/")) genreMapped = "Country";
+  else if (urlLower.includes("/metal/")) genreMapped = "Metal";
+  else {
+    const parts = data.url.split('/');
+    const rawGenero = parts[parts.length - 2];
+    genreMapped = rawGenero.charAt(0).toUpperCase() + rawGenero.slice(1);
+  }
   
   return {
     nombre,
     url: data.url,
     artistas: data.artistas,
-    genero: [capitalized]
+    genero: [genreMapped]
   };
 });
