@@ -47,9 +47,11 @@ const CrearSalaPage: React.FC = () => {
     }
 
     try {
+      const cancionInfo = cancionesDisponibles.find(c => c.nombre === cancionSeleccionada);
       const payload = {
         nombre,
         genero: generos.length > 0 && generos[0] !== "" ? generos : ["General"],
+        artista: cancionInfo ? cancionInfo.artistas : "Varios Artistas",
         canciones: cancionSeleccionada ? [cancionSeleccionada] : [], 
       };
       
