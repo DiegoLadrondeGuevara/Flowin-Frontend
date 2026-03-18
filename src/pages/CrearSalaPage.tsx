@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
+import { cancionesData } from "../data/cancionesData";
 
 const CrearSalaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -12,30 +13,11 @@ const CrearSalaPage: React.FC = () => {
 
   const token = localStorage.getItem("token");
 
-  const cancionesDisponibles = [
-  { nombre: "Bohemian Rhapsody", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/rock/queen/bohemianRapsody.mp3" },
-  { nombre: "TNT", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/rock/acdc/TNT.mp3" },
-  { nombre: "Cant Stop", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/rock/rhcp/cantStop.mp3" },
-  { nombre: "Missin You Like This", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/country/postMalone/missinYouLikeThis.mp3" },
-  { nombre: "What Dont Belong To Me", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/country/postMalone/whatDontBelongToMe.mp3" },
-  { nombre: "Ludwig No5 Op67", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/clasica/beethoven/ludwingNo5Op67.mp3" },
-  { nombre: "Pequena Serenata Nocturna", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/clasica/mozart/peque%C3%B1aSerenataNocturna.mp3" },
-  { nombre: "The Nights", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/electronica/avicii/theNights.mp3" },
-  { nombre: "Waiting For Love", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/electronica/avicii/waitingForLove.mp3" },
-  { nombre: "Party Rock Anthem", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/electronica/lmfao/electronica_lmfao_partyRockAnthem.mp3" },
-  { nombre: "Sorry For Party Rock", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/electronica/lmfao/electronica_lmfao_sorryForPartyRockk.mp3" },
-  { nombre: "Take Five", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/jazz/daveBrubeck/jazz_daveBrubeck_takeFive.mp3" },
-  { nombre: "What A Wonderful World", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/jazz/louisArmstrong/jazz_louisArmstrong_whatAWonderfulWorld.mp3" },
-  { nombre: "Limbo", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/latina/daddyYankee/latina_daddyYankee_Limbo.mp3" },
-  { nombre: "Enter Sandman", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/metal/metallica/enterSandman.mp3" },
-  { nombre: "Master Of Puppets", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/metal/metallica/masteroffpuppets.mp3" },
-  { nombre: "Wherever I May Roam", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/metal/metallica/whereverIMayRoam.mp3" },
-  { nombre: "Judas", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/pop/ladyGaga/judas.mp3" },
-  { nombre: "Billie Jean", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/pop/michaelJackson/billieJean.mp3" },
-  { nombre: "Lloraras", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/salsa/dLeon/Lloraras.mp3" },
-  { nombre: "Goosebumps", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/trap/trap_travisScott_goosebumps.mp3" },
-  { nombre: "Out West", url: "https://flowin2-music-bucket.s3.us-east-1.amazonaws.com/trap/trap_travisScottANDjackboys_outwest.mp3" },
-];
+  const cancionesDisponibles = Object.entries(cancionesData).map(([nombre, data]) => ({
+    nombre,
+    url: data.url,
+    artistas: data.artistas.join(", ")
+  }));
 
   const [cancionSeleccionada, setCancionSeleccionada] = useState<string>("");
 
@@ -67,8 +49,8 @@ const CrearSalaPage: React.FC = () => {
     try {
       const payload = {
         nombre,
-        genero: generos,
-        canciones: cancionSeleccionada || "", // Enviar como string, no como array
+        genero: generos.length > 0 && generos[0] !== "" ? generos : ["General"],
+        canciones: cancionSeleccionada ? [cancionSeleccionada] : [], 
       };
       
       const res = await axios.post(
