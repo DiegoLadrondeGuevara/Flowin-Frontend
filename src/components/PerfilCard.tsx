@@ -42,7 +42,7 @@ const IconTitle: React.FC<{ icon: React.ReactNode; children: React.ReactNode }> 
 
 const PerfilHeader: React.FC<PerfilHeaderProps> = ({ username, mail, fotoUrl }) => (
   <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-10 flex items-center justify-between mb-14 shadow-2xl relative overflow-hidden">
-    <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+    <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.15)_0%,_transparent_70%)] rounded-full pointer-events-none"></div>
     <div className="flex items-center gap-8 relative z-10">
       <img
         src={fotoUrl || "https://ui-avatars.com/api/?name=" + encodeURIComponent(username) + "&background=1e293b&color=93c5fd"}

@@ -132,7 +132,7 @@ const Home: React.FC = () => {
                 personas={sala.usuariosConectados?.length || 0}
                 genero={sala.genero && sala.genero.length > 0 ? sala.genero.join(", ") : "Sin género"}
                 artista={getArtista(sala.canciones)}
-                onEntrar={() => navigate(`/sala/${sala.id}`)}
+                onEntrar={() => navigate(`/sala/${sala.id}`, { state: { isHost: false } })}
               />
               ))}
         </div>

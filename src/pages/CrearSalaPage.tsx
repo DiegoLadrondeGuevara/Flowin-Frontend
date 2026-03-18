@@ -111,68 +111,99 @@ const CrearSalaPage: React.FC = () => {
   };
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-500 to-blue-400 flex flex-col items-center justify-center">
-    <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-8">
-      <h1 className="text-3xl font-extrabold text-blue-700 mb-6 text-center">Crear Sala</h1>
+  <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col items-center justify-center px-4 relative overflow-hidden font-poppins py-12">
+    <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.15)_0%,_transparent_70%)] rounded-full pointer-events-none z-0"></div>
+    <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.15)_0%,_transparent_70%)] rounded-full pointer-events-none z-0"></div>
+  
+    <div className="w-full max-w-2xl bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_8px_32px_rgba(31,38,135,0.4)] p-10 relative z-10">
+      <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white mb-8 text-center tracking-tight drop-shadow-md">Crear nueva Sala</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block font-semibold text-blue-700 mb-1">Nombre</label>
+          <label className="block font-semibold text-blue-300 mb-2">Nombre de la Sala</label>
           <input
             type="text"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            className="w-full border border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full bg-slate-900/50 border border-slate-700 text-white p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 transition-all font-medium"
+            placeholder="Ej: Vibes Nocturnas"
             required
           />
         </div>
         <div>
-          <label className="block font-semibold text-blue-700 mb-1">Géneros (separados por coma)</label>
+          <label className="block font-semibold text-blue-300 mb-2">Géneros (Separados por coma para filtrar los temas)</label>
           <input
             type="text"
             value={generos.join(", ")}
             onChange={handleGeneroChange}
-            className="w-full border border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full bg-slate-900/50 border border-slate-700 text-white p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 transition-all font-medium"
             placeholder="Ej: pop, rock, jazz"
           />
         </div>
         <div>
-          <label className="block font-semibold text-blue-700 mb-1">Canción (elige una para empezar :D)</label>
-          <div className="max-h-48 overflow-y-auto border border-blue-200 rounded-lg p-3 bg-blue-50">
+          <label className="block font-semibold text-blue-300 mb-3">Canción Inicial</label>
+          <div className="max-h-64 overflow-y-auto border border-slate-700/50 rounded-xl p-3 bg-slate-900/40 custom-scrollbar pr-2 space-y-2 relative shadow-inner">
             {cancionesDisponiblesFiltradas.length === 0 && (
-              <div className="text-gray-500 font-medium text-center my-2">
+              <div className="text-slate-500 font-medium text-center my-8">
                 No se encontraron canciones para los géneros escritos.
               </div>
             )}
             {cancionesDisponiblesFiltradas.map((cancion) => (
-              <label key={cancion.url} className="flex items-center mb-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="cancion"
-                  value={cancion.nombre}
-                  checked={cancionSeleccionada === cancion.nombre}
-                  onChange={() => setCancionSeleccionada(cancion.nombre)}
-                  className="accent-blue-600"
-                />
-                <span className="ml-3 text-blue-900 font-medium">{cancion.nombre}</span>
+              <label 
+                key={cancion.url} 
+                className={`flex flex-col items-start px-4 py-3 cursor-pointer rounded-lg border transition-all duration-200 ${
+                  cancionSeleccionada === cancion.nombre 
+                    ? "bg-blue-600/20 border-blue-500/50 shadow-inner" 
+                    : "bg-slate-800/50 border-transparent hover:bg-slate-700/60"
+                }`}
+              >
+                <div className="flex items-center w-full">
+                  <input
+                    type="radio"
+                    name="cancion"
+                    value={cancion.nombre}
+                    checked={cancionSeleccionada === cancion.nombre}
+                    onChange={() => setCancionSeleccionada(cancion.nombre)}
+                    className="accent-blue-500 w-4 h-4"
+                  />
+                  <div className="ml-4 flex flex-col">
+                    <span className={`font-bold text-base leading-tight ${cancionSeleccionada === cancion.nombre ? "text-blue-300" : "text-white"}`}>
+                      {cancion.nombre}
+                    </span>
+                    <span className="text-sm font-medium text-slate-400 mt-0.5">{cancion.artistas}</span>
+                  </div>
+                </div>
               </label>
             ))}
-            {!cancionSeleccionada && (
-              <div className="text-blue-600 font-semibold mt-2 text-center">
+            {!cancionSeleccionada && cancionesDisponiblesFiltradas.length > 0 && (
+              <div className="text-blue-400/80 font-medium mt-4 text-center">
                 Escoge una canción para empezar :)
               </div>
             )}
           </div>
         </div>
-        {error && <div className="text-red-600 font-semibold text-center">{error}</div>}
-        {mensaje && <div className="text-green-600 font-semibold text-center">{mensaje}</div>}
+        {error && <div className="bg-red-900/20 border border-red-800/50 text-red-400 font-semibold text-center p-4 rounded-xl">{error}</div>}
+        {mensaje && <div className="bg-green-900/20 border border-green-800/50 text-green-400 font-semibold text-center p-4 rounded-xl">{mensaje}</div>}
+        
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow transition-all"
+          className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_24px_rgba(37,99,235,0.4)] hover:shadow-[0_8px_32px_rgba(37,99,235,0.6)] hover:-translate-y-0.5 transition-all mt-4 text-lg"
         >
-          Crear Sala
+          Crear Sala Mágica
         </button>
       </form>
     </div>
+    <style>{`
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(148, 163, 184, 0.2);
+        border-radius: 20px;
+      }
+    `}</style>
   </div>
 );
 }

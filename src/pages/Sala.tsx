@@ -205,15 +205,17 @@ const Sala = () => {
                   />
                 </div>
 
-                <button
-                  className="mt-6 px-10 py-4 text-lg bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-full font-bold shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[0_8px_32px_rgba(31,38,135,0.4)] transition-all duration-300"
-                  onClick={() => setShowModal(true)}
-                >
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-                    Elegir otra pista
-                  </span>
-                </button>
+                {isHost && (
+                  <button
+                    className="mt-6 px-10 py-4 text-lg bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-full font-bold shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[0_8px_32px_rgba(31,38,135,0.4)] transition-all duration-300"
+                    onClick={() => setShowModal(true)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                      Elegir otra pista
+                    </span>
+                  </button>
+                )}
 
                 {showModal && (
                   <ListaCancionesModal
@@ -227,8 +229,12 @@ const Sala = () => {
             ) : (
               <div className="mt-10 text-white text-2xl bg-white/5 border border-white/10 px-12 py-10 rounded-3xl shadow-2xl backdrop-blur-md font-semibold text-center flex flex-col items-center gap-4">
                 <svg className="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-                No hay canciones sonando.
-                <span className="text-base text-blue-200 mt-2 block font-normal">Escoge una del catálogo si eres el Host.</span>
+                {isHost ? "No hay canciones sonando." : "El Host aún no ha elegido una canción."}
+                {isHost && (
+                  <button onClick={() => setShowModal(true)} className="text-base text-blue-300 hover:text-white mt-4 block font-bold bg-blue-600/20 px-6 py-2 rounded-full border border-blue-500/30 transition-all">
+                    Abrir catálogo de canciones
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -269,17 +275,34 @@ const Sala = () => {
                 ¡Sé el primero en escribir!
               </div>
             )}
-            {mensajes.map((m, i) => (
-              <div
-                key={i}
-                className="bg-slate-800/80 p-3.5 rounded-2xl rounded-tl-sm border border-slate-700/50 shadow-sm w-fit max-w-[90%]"
-              >
-                <span className="font-bold text-blue-400 text-sm block mb-0.5">
-                  {m.username}
-                </span>
-                <span className="text-slate-200 text-sm">{m.contenido}</span>
-              </div>
-            ))}
+            {mensajes.map((m, i) => {
+              // Asumimos que el primer usuario conectado es el creador/host, o bien usamos su rol si backend lo soporta.
+              const probableHostUsername = usuariosConectados[0]?.username;
+              const isThisHost = m.username === probableHostUsername;
+              
+              return (
+                <div
+                  key={i}
+                  className={`p-3.5 rounded-2xl shadow-sm w-fit max-w-[90%] flex flex-col gap-1 ${
+                    isThisHost 
+                      ? "bg-slate-800 border-2 border-yellow-500/60 rounded-tl-sm" 
+                      : "bg-slate-800/80 border border-slate-700/50 rounded-tl-sm"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="font-bold text-blue-400 text-sm">
+                      {m.username}
+                    </span>
+                    {isThisHost && (
+                      <span className="bg-yellow-500/20 text-yellow-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-yellow-500/30 uppercase tracking-wider">
+                        👑 Host
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-slate-200 text-sm">{m.contenido}</span>
+                </div>
+              );
+            })}
             <div ref={messagesEndRef} />
             {error && (
               <div className="bg-red-900/20 text-red-400 p-3 rounded-xl border border-red-800/50">

@@ -48,7 +48,7 @@ const ArtistaFavoritoItem: React.FC<ArtistaFavorito> = ({ nombre, genero, fotoUr
 
 const ArtistasFavoritosCard: React.FC<{ artistas: ArtistaFavorito[] }> = ({ artistas }) => (
   <div className="bg-slate-800/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_8px_32px_rgba(31,38,135,0.2)] p-10 flex-1 flex flex-col relative overflow-hidden">
-    <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+    <div className="absolute top-[-150px] right-[-150px] w-[450px] h-[450px] bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.12)_0%,_transparent_70%)] rounded-full pointer-events-none"></div>
     <div className="flex items-center gap-3 font-bold text-2xl mb-8 text-blue-300 relative z-10">
       <span role="img" aria-label="mic" className="text-3xl drop-shadow-md">🎤</span>
       Artistas Favoritos
