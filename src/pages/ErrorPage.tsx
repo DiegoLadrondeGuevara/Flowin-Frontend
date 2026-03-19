@@ -9,10 +9,10 @@ interface ErrorPageProps {
   statusCode?: number;
 }
 
-const ErrorPage: React.FC<ErrorPageProps> = ({ 
-  errorType = 'general', 
+const ErrorPage: React.FC<ErrorPageProps> = ({
+  errorType = 'general',
   message,
-  statusCode 
+  statusCode
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,7 +64,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
           ],
           actions: [
             { label: 'Reintentar', action: () => window.location.reload(), variant: 'primary', icon: <RefreshCw className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Ir al Inicio', action: () => navigate('/login'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
           ]
         };
 
@@ -178,8 +178,8 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
                 onClick={action.action}
                 className={`
                   px-8 py-4 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-2
-                  ${action.variant === 'primary' 
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl' 
+                  ${action.variant === 'primary'
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }
                 `}
