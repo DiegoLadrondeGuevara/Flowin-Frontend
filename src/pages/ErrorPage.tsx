@@ -64,7 +64,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
           ],
           actions: [
             { label: 'Reintentar', action: () => window.location.reload(), variant: 'primary', icon: <RefreshCw className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/login'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Ir al Inicio', action: () => navigate('/auth/login'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
           ]
         };
 
