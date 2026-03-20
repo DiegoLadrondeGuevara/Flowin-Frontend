@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FlowInLogo from '../components/FlowInLogo';
-import { AlertTriangle, Wifi, Lock, RefreshCw, Home, LogIn } from 'lucide-react';
+import { AlertTriangle, Wifi, Lock, RefreshCw, LogIn } from 'lucide-react';
 
 interface ErrorPageProps {
   errorType?: 'forbidden' | 'connection' | 'server' | 'notFound' | 'general';
@@ -44,8 +44,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
             'Contacta al administrador si el problema persiste'
           ],
           actions: [
-            { label: 'Iniciar Sesión', action: () => navigate('/login'), variant: 'primary', icon: <LogIn className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Login', action: () => navigate('/auth/login'), variant: 'primary', icon: <LogIn className="w-4 h-4" /> }
           ]
         };
 
@@ -64,7 +63,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
           ],
           actions: [
             { label: 'Reintentar', action: () => window.location.reload(), variant: 'primary', icon: <RefreshCw className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/auth/login'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Login', action: () => navigate('/auth/login'), variant: 'secondary', icon: <LogIn className="w-4 h-4" /> }
           ]
         };
 
@@ -83,7 +82,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
           ],
           actions: [
             { label: 'Reintentar', action: () => window.location.reload(), variant: 'primary', icon: <RefreshCw className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Login', action: () => navigate('/auth/login'), variant: 'secondary', icon: <LogIn className="w-4 h-4" /> }
           ]
         };
 
@@ -101,7 +100,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
             'Usa el menú de navegación para encontrar lo que buscas'
           ],
           actions: [
-            { label: 'Ir al Inicio', action: () => navigate('/'), variant: 'primary', icon: <Home className="w-4 h-4" /> },
+            { label: 'Login', action: () => navigate('/auth/login'), variant: 'primary', icon: <LogIn className="w-4 h-4" /> },
             { label: 'Volver Atrás', action: () => navigate(-1), variant: 'secondary' }
           ]
         };
@@ -121,7 +120,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
           ],
           actions: [
             { label: 'Reintentar', action: () => window.location.reload(), variant: 'primary', icon: <RefreshCw className="w-4 h-4" /> },
-            { label: 'Ir al Inicio', action: () => navigate('/'), variant: 'secondary', icon: <Home className="w-4 h-4" /> }
+            { label: 'Login', action: () => navigate('/auth/login'), variant: 'secondary', icon: <LogIn className="w-4 h-4" /> }
           ]
         };
     }
